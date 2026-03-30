@@ -1,4 +1,4 @@
-import project1 from "@/assets/project-1.jpg";
+import project1Hero from "@/assets/AG_ADU_LIVINGROOM2.png";
 import project2 from "@/assets/project-2.jpg";
 import project3 from "@/assets/project-3.jpg";
 import project4 from "@/assets/project-4.jpg";
@@ -22,8 +22,8 @@ export const projects: Project[] = [
     title: "Al Raha Residence",
     location: "Abu Dhabi, UAE",
     category: "interiors",
-    image: project1,
-    images: [project1, project2, project3],
+    image: project1Hero,
+    images: [project1Hero, project2, project3],
     description: "A contemporary family home blending traditional Emirati warmth with modern minimalism. Natural materials and earthy palettes create an inviting atmosphere throughout.",
     year: "2024",
   },
@@ -43,7 +43,7 @@ export const projects: Project[] = [
     location: "Dubai, UAE",
     category: "interiors",
     image: project3,
-    images: [project3, project1, project6],
+    images: [project3, project6],
     description: "An open-plan loft that celebrates the intersection of dining and living. Terracotta accents and natural wood bring grounding warmth to the waterfront space.",
     year: "2023",
   },
@@ -63,7 +63,7 @@ export const projects: Project[] = [
     location: "Muscat, Oman",
     category: "interiors",
     image: project4,
-    images: [project4, project5, project1],
+    images: [project4, project5],
     description: "A sanctuary of calm where natural stone and brass fixtures create an intimate, spa-like atmosphere. Every detail invites stillness and renewal.",
     year: "2023",
   },
