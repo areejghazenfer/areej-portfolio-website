@@ -14,8 +14,8 @@ export default {
     },
     extend: {
       fontFamily: {
-        display: ['"Cormorant Garamond"', 'serif'],
-        body: ['"Outfit"', 'sans-serif'],
+        display: ['"Neue Haas Grotesk Display Pro"', '"Neue Haas Grotesk"', '"HelveticaNeue-Light"', '"Helvetica Neue"', 'Helvetica', 'Arial', 'sans-serif'],
+        body: ['"IBM Plex Sans"', 'sans-serif'],
       },
       colors: {
         border: "hsl(var(--border))",
