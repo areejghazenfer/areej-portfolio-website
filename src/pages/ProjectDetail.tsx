@@ -1,7 +1,7 @@
 import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowLeft } from "lucide-react";
-import { projects } from "@/data/projects";
+import { projects, ProjectImage } from "@/data/projects";
 
 const ProjectDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -17,6 +17,9 @@ const ProjectDetail = () => {
       </main>
     );
   }
+
+  const resolveImage = (img: string | ProjectImage) =>
+    typeof img === "string" ? { src: img } : img;
 
   return (
     <main className="pt-24 md:pt-32">
@@ -49,25 +52,58 @@ const ProjectDetail = () => {
         </motion.div>
       </section>
 
-      {/* Scrolling images — Omedezin inspired */}
+      {/* Images with 20-80 layout: left gutter for captions, right for images */}
       <section className="px-6 md:px-12 pb-20 md:pb-32 space-y-6 md:space-y-8">
-        {project.images.map((img, i) => (
-          <motion.div
-            key={i}
-            initial={{ opacity: 0, y: 60 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.8, delay: i * 0.1 }}
-            className="w-full"
-          >
-            <img
-              src={img}
-              alt={`${project.title} — View ${i + 1}`}
-              className="w-full h-auto object-cover"
-              loading="lazy"
-            />
-          </motion.div>
-        ))}
+        {project.images.map((img, i) => {
+          const resolved = resolveImage(img);
+
+          return (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 60 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.8, delay: i * 0.05 }}
+              className="flex gap-6"
+            >
+              {/* Left gutter — ~20% */}
+              <div className="hidden md:flex w-[18%] flex-shrink-0 items-end pb-4">
+                {resolved.caption && (
+                  <p className="font-body text-xs text-muted-foreground tracking-wider uppercase">
+                    {resolved.caption}
+                  </p>
+                )}
+              </div>
+
+              {/* Right image area — ~80% */}
+              <div className="w-full md:w-[82%]">
+                {resolved.pair ? (
+                  <div className="grid grid-cols-2 gap-3">
+                    <img
+                      src={resolved.src}
+                      alt={`${project.title} — View ${i + 1}a`}
+                      className="w-full h-auto object-cover"
+                      loading="lazy"
+                    />
+                    <img
+                      src={resolved.pair}
+                      alt={`${project.title} — View ${i + 1}b`}
+                      className="w-full h-auto object-cover"
+                      loading="lazy"
+                    />
+                  </div>
+                ) : (
+                  <img
+                    src={resolved.src}
+                    alt={`${project.title} — View ${i + 1}`}
+                    className="w-full h-auto object-cover"
+                    loading="lazy"
+                  />
+                )}
+              </div>
+            </motion.div>
+          );
+        })}
       </section>
     </main>
   );
