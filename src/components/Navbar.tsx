@@ -13,7 +13,7 @@ const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-sm">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-sm border-b border-border/40">
       <nav className="flex items-center justify-between px-6 md:px-12 py-5">
         <Link to="/" className="font-display text-xl md:text-2xl font-light tracking-ultra-wide uppercase">
           Areej Ghazenfer

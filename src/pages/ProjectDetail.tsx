@@ -1,7 +1,7 @@
 import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowLeft, Instagram } from "lucide-react";
-import { projects, ProjectImage } from "@/data/projects";
+import { projects, ProjectImage, ProjectDetail } from "@/data/projects";
 
 const resolveImage = (img: string | ProjectImage) =>
   typeof img === "string" ? { src: img } : img;
@@ -28,7 +28,7 @@ const ProjectDetail = () => {
     >
       {/* ── Left column: 25% — sticky, non-scrollable ── */}
       <div
-        className="hidden md:flex w-1/4 flex-shrink-0 h-full flex-col overflow-hidden border-r border-border/30"
+        className="hidden md:flex w-1/4 flex-shrink-0 h-full flex-col overflow-y-auto scrollbar-hide [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
         style={{ padding: "48px 60px 48px 40px" }}
       >
         <motion.div
@@ -62,65 +62,40 @@ const ProjectDetail = () => {
             {project.title}
           </h1>
 
-          {/* Divider */}
-          <div className="h-px bg-foreground/12" style={{ marginBottom: "20px" }} />
-
-          {/* Metadata rows */}
-          <div style={{ marginBottom: "28px" }}>
-            {[
-              { label: "Location", value: project.location },
-              { label: "Year", value: project.year },
-              { label: "Type", value: "Residential" },
-            ].map(({ label, value }) => (
-              <div
-                key={label}
-                className="flex justify-between items-baseline"
-                style={{ paddingTop: "10px", paddingBottom: "10px", borderBottom: "1px solid hsl(var(--border) / 0.2)" }}
-              >
-                <span className="font-body text-[10px] tracking-ultra-wide uppercase text-muted-foreground/55">
-                  {label}
-                </span>
-                <span className="font-display text-[11px] tracking-wide uppercase text-foreground/75">
-                  {value}
-                </span>
-              </div>
-            ))}
-          </div>
+          {/* Subtitle / Description */}
+          {project.description && (
+            <p
+              className="font-body italic text-muted-foreground leading-snug"
+              style={{ fontSize: "13px", marginBottom: "24px" }}
+            >
+              {project.description}
+            </p>
+          )}
 
           {/* Divider */}
           <div className="h-px bg-foreground/12" style={{ marginBottom: "24px" }} />
 
-          {/* Description */}
-          <p
-            className="font-body text-[13px] leading-[1.75] text-muted-foreground"
-            style={{ marginBottom: "20px" }}
-          >
-            {project.description}
-          </p>
+          {/* Project-specific details */}
+          {project.details && project.details.length > 0 && (
+            <div style={{ marginBottom: "20px" }}>
+              {project.details.map(({ label, value }: ProjectDetail) => (
+                <div
+                  key={label}
+                  style={{ paddingTop: "10px", paddingBottom: "10px", borderBottom: "1px solid hsl(var(--border) / 0.2)" }}
+                >
+                  <span className="font-body text-[10px] tracking-ultra-wide uppercase text-muted-foreground/55 block" style={{ marginBottom: "3px" }}>
+                    {label}
+                  </span>
+                  <span className="font-body text-[12px] leading-snug text-foreground/75">
+                    {value}
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
 
-          {/* Filler — slightly faded */}
-          <p
-            className="font-body text-[13px] leading-[1.75] text-muted-foreground/65"
-            style={{ marginBottom: "16px" }}
-          >
-            The design draws from the regional vernacular, reinterpreting
-            traditional forms through a contemporary lens. Each material was
-            selected for its tactile quality and resonance with the surrounding
-            landscape.
-          </p>
-
-          <p className="font-body text-[13px] leading-[1.75] text-muted-foreground/45">
-            Natural light moves through the rooms in a deliberate choreography,
-            dissolving the boundary between interior and exterior as the day
-            progresses.
-          </p>
-
-          {/* Scroll hint — pinned to bottom */}
-          <div className="mt-auto">
-            <p className="font-body text-[10px] tracking-ultra-wide uppercase text-muted-foreground/35">
-              Scroll to explore ↓
-            </p>
-          </div>
+          {/* Bottom spacing */}
+          <div style={{ paddingBottom: "50px" }} />
         </motion.div>
       </div>
 
@@ -150,7 +125,7 @@ const ProjectDetail = () => {
         </div>
 
         {/* Images — 15px padding on all sides of each image block */}
-        <div style={{ padding: "15px" }}>
+        <div style={{ paddingTop: "48px", paddingLeft: "15px", paddingRight: "15px", paddingBottom: "15px" }}>
           {project.images.map((img, i) => {
             const resolved = resolveImage(img);
             return (

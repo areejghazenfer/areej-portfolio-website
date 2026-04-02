@@ -1,4 +1,4 @@
-import project1Hero from "@/assets/AG_ADU_LIVINGROOM2.png";
+import project1Hero from "@/assets/LIVING ROOM UPDATED.png";
 import project1 from "@/assets/project-1.jpg";
 import project2 from "@/assets/project-2.jpg";
 import project3 from "@/assets/project-3.jpg";
@@ -27,6 +27,11 @@ export interface ProjectImage {
   caption?: string;
 }
 
+export interface ProjectDetail {
+  label: string;
+  value: string;
+}
+
 export interface Project {
   id: string;
   title: string;
@@ -36,13 +41,14 @@ export interface Project {
   images: (string | ProjectImage)[];
   description: string;
   year: string;
+  details?: ProjectDetail[];
 }
 
 export const projects: Project[] = [
   {
     id: "the-adaptive-frame",
     title: "The Adaptive Frame",
-    location: "Abu Dhabi, UAE",
+    location: "Richmond, VA",
     category: "interiors",
     image: project1Hero,
     images: [
@@ -56,8 +62,17 @@ export const projects: Project[] = [
       p1_8,
     ],
     description:
-      "A contemporary family home blending traditional Emirati warmth with modern minimalism. Natural materials and earthy palettes create an inviting atmosphere throughout.",
+      "An Accessory Dwelling Unit designed for dignity through transition.",
     year: "2024",
+    details: [
+      { label: "Type", value: "Residential" },
+      { label: "Year", value: "2024" },
+      { label: "Site", value: "3038 Montrose Ave, Richmond VA, 23222" },
+      { label: "Client", value: "Moments of Hope" },
+      { label: "Partner", value: "Storefront for Community Design" },
+      { label: "Mentor", value: "Camden Whitehead" },
+      { label: "Team", value: "Cassie Grimes & Mia Green" },
+    ],
   },
   {
     id: "cedar-villa",
