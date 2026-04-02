@@ -7,16 +7,16 @@ import project5 from "@/assets/project-5.jpg";
 import project6 from "@/assets/project-6.jpg";
 
 // Project 1 — The Adaptive Frame
-import p1_1R from "@/assets/project1-images/Page_1_R.jpg";
+import p1_1R from "@/assets/LIVING ROOM UPDATED CROPPED.png";
 import p1_2L from "@/assets/project1-images/Page_2_L.jpg";
 import p1_2R from "@/assets/project1-images/Page_2_R.jpg";
 import p1_3 from "@/assets/project1-images/Page_3.jpg";
-import p1_4L from "@/assets/project1-images/Page_4_L.jpg";
+import p1_4L from "@/assets/AG_ADU_KITCHEN CROPPED.png";
 import p1_4R from "@/assets/project1-images/Page_4_R.jpg";
-import p1_5L from "@/assets/project1-images/Page_5_L.jpg";
+import p1_5L from "@/assets/AG_ADU_BEDROOM CROPPED.png";
 import p1_5R from "@/assets/project1-images/Page_5_R.jpg";
-import p1_6L from "@/assets/project1-images/Page_6_L.jpg";
-import p1_6R from "@/assets/project1-images/Page_6_R.jpg";
+import p1_6L from "@/assets/AG_ADU_BATHROOM CROPPED.png";
+import p1_6R from "@/assets/project1-images/Adaptive_Frame_Page_6_R.jpg";
 import p1_7 from "@/assets/project1-images/Page_7.jpg";
 import p1_8 from "@/assets/project1-images/Page_8.jpg";
 
@@ -25,6 +25,10 @@ export interface ProjectImage {
   /** If set, this image is displayed side-by-side with a paired image */
   pair?: string;
   caption?: string;
+  /** Full double-page landscape spread — renders at full width */
+  fullSpread?: boolean;
+  /** Portrait image that should match the width of standard landscape pages, allowing it to be taller */
+  tallImage?: boolean;
 }
 
 export interface ProjectDetail {
@@ -54,12 +58,12 @@ export const projects: Project[] = [
     images: [
       p1_1R,
       { src: p1_2L, pair: p1_2R },
-      p1_3,
+      { src: p1_3, fullSpread: true },
       { src: p1_4L, pair: p1_4R },
       { src: p1_5L, pair: p1_5R },
-      { src: p1_6L, pair: p1_6R },
-      p1_7,
-      p1_8,
+      { src: p1_6L, pair: p1_6R, tallImage: true },
+      { src: p1_7, fullSpread: true },
+      { src: p1_8, fullSpread: true },
     ],
     description:
       "An Accessory Dwelling Unit designed for dignity through transition.",
