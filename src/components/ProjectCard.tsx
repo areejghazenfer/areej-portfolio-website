@@ -26,8 +26,8 @@ const ProjectCard = ({ id, title, image, index }: ProjectCardProps) => {
             loading="lazy"
           />
           {/* Hover overlay */}
-          <div className="absolute inset-0 bg-background/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
-            <h3 className="font-display text-2xl font-medium tracking-wide text-foreground text-center px-4">
+          <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
+            <h3 className="font-display text-2xl font-medium tracking-wide text-white text-center px-4">
               {title}
             </h3>
           </div>

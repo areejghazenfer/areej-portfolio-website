@@ -23,8 +23,8 @@ const ImageWithOverlay = ({
   >
     <img src={src} alt={alt} className={className} loading={eager ? "eager" : "lazy"} />
     {caption && (
-      <div className="absolute inset-0 bg-background/75 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center pointer-events-none">
-        <p className="font-display text-base font-semibold tracking-wide text-foreground text-center px-6">
+      <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center pointer-events-none">
+        <p className="font-display text-base font-semibold tracking-wide text-white text-center px-6">
           {caption}
         </p>
       </div>
@@ -139,7 +139,7 @@ const ProjectDetail = () => {
         className="hidden md:block w-1/4 flex-shrink-0 overflow-hidden"
         style={{ position: "sticky", top: 0, height: "calc(100vh - 72px)" }}
       >
-        <div ref={leftInnerRef} style={{ padding: "48px 60px 48px 40px" }}>
+        <div ref={leftInnerRef} style={{ padding: "48px 40px 48px 40px" }}>
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}

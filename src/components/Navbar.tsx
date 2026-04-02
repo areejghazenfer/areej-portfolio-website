@@ -1,9 +1,10 @@
 import { Link, useLocation } from "react-router-dom";
-import { Instagram, Menu, X } from "lucide-react";
+import { Instagram, Linkedin, Menu, X } from "lucide-react";
 import { useState } from "react";
 
 const navLinks = [
   { label: "Work", path: "/work" },
+  { label: "Services", path: "/services" },
   { label: "About", path: "/about" },
   { label: "Contact", path: "/contact" },
 ];
@@ -41,6 +42,15 @@ const Navbar = () => {
           >
             <Instagram size={16} />
           </a>
+          <a
+            href="https://www.linkedin.com/in/areej-ghazenfer/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-foreground/70 hover:text-primary transition-colors duration-300"
+            aria-label="LinkedIn"
+          >
+            <Linkedin size={16} />
+          </a>
         </div>
 
         {/* Mobile hamburger */}
@@ -76,6 +86,14 @@ const Navbar = () => {
               className="text-foreground/70 flex items-center gap-2 text-sm tracking-ultra-wide uppercase"
             >
               <Instagram size={16} /> Instagram
+            </a>
+            <a
+              href="https://www.linkedin.com/in/areej-ghazenfer/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-foreground/70 flex items-center gap-2 text-sm tracking-ultra-wide uppercase"
+            >
+              <Linkedin size={16} /> LinkedIn
             </a>
           </div>
         </div>
