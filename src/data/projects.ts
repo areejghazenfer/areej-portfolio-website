@@ -25,6 +25,8 @@ export interface ProjectImage {
   /** If set, this image is displayed side-by-side with a paired image */
   pair?: string;
   caption?: string;
+  /** Caption for the paired (right) image when it differs from caption */
+  captionPair?: string;
   /** Full double-page landscape spread — renders at full width */
   fullSpread?: boolean;
   /** Portrait image that should match the width of standard landscape pages, allowing it to be taller */
@@ -56,14 +58,14 @@ export const projects: Project[] = [
     category: "interiors",
     image: project1Hero,
     images: [
-      p1_1R,
-      { src: p1_2L, pair: p1_2R },
-      { src: p1_3, fullSpread: true },
-      { src: p1_4L, pair: p1_4R },
-      { src: p1_5L, pair: p1_5R },
-      { src: p1_6L, pair: p1_6R, tallImage: true },
-      { src: p1_7, fullSpread: true },
-      { src: p1_8, fullSpread: true },
+      { src: p1_1R, caption: "Living Room Render, Morning Light" },
+      { src: p1_2L, pair: p1_2R, caption: "Site Plan", captionPair: "Floor Plan" },
+      { src: p1_3, fullSpread: true, caption: "Building Section" },
+      { src: p1_4L, pair: p1_4R, caption: "Kitchen Render, Morning Light", captionPair: "Kitchen Elevation" },
+      { src: p1_5L, pair: p1_5R, caption: "Bedroom Render, Evening Light", captionPair: "Bedroom Elevation 01" },
+      { src: p1_6L, pair: p1_6R, tallImage: true, caption: "Bathroom Render", captionPair: "Bathroom Elevation 01 + 02" },
+      { src: p1_7, fullSpread: true, caption: "Roof Studies" },
+      { src: p1_8, fullSpread: true, caption: "Dwelling in Transition: An exploration of how everyday rituals construct the experience of home" },
     ],
     description:
       "An Accessory Dwelling Unit designed for dignity through transition.",
