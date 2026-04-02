@@ -1,5 +1,7 @@
 # Areej Ghazenfer — Portfolio Website
 
+> ✨ Maintained by Areej Ghazenfer (@areejghazenfer) — Interior Designer & Creative Director
+
 ## Project info
 
 **URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
