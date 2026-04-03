@@ -44,9 +44,10 @@ const ProjectDetail = () => {
   const [activePhase, setActivePhase] = useState(0);
   const [refImageWidth, setRefImageWidth] = useState<number | null>(null);
   const refImageRef = useRef<HTMLImageElement>(null);
+  const [carouselPage, setCarouselPage] = useState(0);
 
-  // Reset phase when project changes
-  useEffect(() => { setActivePhase(0); setRefImageWidth(null); }, [id]);
+  // Reset phase + carousel when project changes
+  useEffect(() => { setActivePhase(0); setRefImageWidth(null); setCarouselPage(0); }, [id]);
 
   // Measure the first non-group image's rendered width to align concept images
   useEffect(() => {
@@ -254,7 +255,7 @@ const ProjectDetail = () => {
             {project.phases.map((phase: ProjectPhase, i: number) => (
               <button
                 key={phase.label}
-                onClick={() => { setActivePhase(i); if (mainRef.current) mainRef.current.scrollTop = 0; }}
+                onClick={() => { setActivePhase(i); setCarouselPage(0); if (mainRef.current) mainRef.current.scrollTop = 0; }}
                 className={`font-body text-xs tracking-ultra-wide uppercase pb-2 border-b-2 transition-colors duration-300 ${
                   activePhase === i
                     ? "border-primary text-primary"
@@ -305,6 +306,37 @@ const ProjectDetail = () => {
                     )}
                   </React.Fragment>
                 ))}
+                {/* Carousel beneath concept images */}
+                {group.carousel && group.carousel.length > 0 && (() => {
+                  const perPage = 3;
+                  const totalPages = Math.ceil(group.carousel.length / perPage);
+                  const pageItems = group.carousel.slice(carouselPage * perPage, (carouselPage + 1) * perPage);
+                  const carouselWidth = refImageWidth ? `${refImageWidth}px` : "calc((100vh - 168px) * 8.5 / 11)";
+                  return (
+                    <div className="mx-auto mt-4 flex items-center gap-3" style={{ width: carouselWidth }}>
+                      <button
+                        onClick={() => setCarouselPage(p => Math.max(0, p - 1))}
+                        disabled={carouselPage === 0}
+                        className="flex-shrink-0 text-primary disabled:text-primary/20 transition-colors"
+                      >
+                        <ChevronLeft size={20} />
+                      </button>
+                      <div className="flex flex-1 gap-2">
+                        {pageItems.map((src, k) => (
+                          <img key={k} src={src} alt="" className="flex-1 min-w-0 h-auto object-cover block" loading="lazy" />
+                        ))}
+                      </div>
+                      <button
+                        onClick={() => setCarouselPage(p => Math.min(totalPages - 1, p + 1))}
+                        disabled={carouselPage === totalPages - 1}
+                        className="flex-shrink-0 text-primary disabled:text-primary/20 transition-colors"
+                      >
+                        <ChevronRight size={20} />
+                      </button>
+                    </div>
+                  );
+                })()}
+
                 {/* Divider beneath third image */}
                 <div className="mx-auto mt-6 h-px" style={{ width: refImageWidth ? `${refImageWidth}px` : "calc((100vh - 168px) * 8.5 / 11)", background: "hsl(var(--primary) / 0.4)" }} />
 
