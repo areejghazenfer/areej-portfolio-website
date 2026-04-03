@@ -16,7 +16,7 @@ const Navbar = () => {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-sm border-b border-border/40">
       <nav className="flex items-center justify-between px-6 md:px-12 py-5">
-        <Link to="/" className="font-display text-xl md:text-2xl font-light tracking-ultra-wide uppercase">
+        <Link to="/" onClick={() => window.scrollTo(0, 0)} className="font-display text-xl md:text-2xl font-light tracking-ultra-wide uppercase">
           Areej Ghazenfer
         </Link>
 
@@ -26,6 +26,7 @@ const Navbar = () => {
             <Link
               key={link.path}
               to={link.path}
+              onClick={() => window.scrollTo(0, 0)}
               className={`font-body text-xs tracking-ultra-wide uppercase transition-colors duration-300 hover:text-primary ${
                 location.pathname === link.path ? "text-primary" : "text-foreground/70"
               }`}
@@ -71,7 +72,7 @@ const Navbar = () => {
               <Link
                 key={link.path}
                 to={link.path}
-                onClick={() => setMobileOpen(false)}
+                onClick={() => { setMobileOpen(false); window.scrollTo(0, 0); }}
                 className={`font-body text-sm tracking-ultra-wide uppercase ${
                   location.pathname === link.path ? "text-primary" : "text-foreground/70"
                 }`}

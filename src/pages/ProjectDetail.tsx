@@ -2,16 +2,17 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import React, { useEffect, useLayoutEffect, useRef, useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, Instagram, Linkedin, X, ChevronLeft, ChevronRight } from "lucide-react";
-import { projects, ProjectImage, ProjectDetail } from "@/data/projects";
+import { projects, ProjectImage, ProjectImageGroup, ProjectImageEntry, ProjectDetail, ProjectPhase } from "@/data/projects";
 
 const resolveImage = (img: string | ProjectImage) =>
   typeof img === "string" ? { src: img } : img;
 
 const ImageWithOverlay = ({
-  src, alt, className, caption, delay, eager, flatIndex, onOpen,
+  src, alt, className, caption, delay, eager, flatIndex, onOpen, imgRef,
 }: {
   src: string; alt: string; className: string; caption?: string;
   delay: number; eager?: boolean; flatIndex: number; onOpen: (i: number) => void;
+  imgRef?: React.RefObject<HTMLImageElement>;
 }) => (
   <motion.div
     className="relative group flex-shrink-0 mx-auto cursor-zoom-in"
@@ -21,7 +22,7 @@ const ImageWithOverlay = ({
     transition={{ duration: 0.6, delay }}
     onClick={() => onOpen(flatIndex)}
   >
-    <img src={src} alt={alt} className={className} loading={eager ? "eager" : "lazy"} />
+    <img ref={imgRef} src={src} alt={alt} className={className} loading={eager ? "eager" : "lazy"} />
     {caption && (
       <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center pointer-events-none">
         <p className="font-display text-base font-semibold tracking-wide text-white text-center px-6">
@@ -40,18 +41,40 @@ const ProjectDetail = () => {
   const currentIndex = projects.findIndex((p) => p.id === id);
   const nextProject = projects[(currentIndex + 1) % projects.length];
 
+  const [activePhase, setActivePhase] = useState(0);
+  const [refImageWidth, setRefImageWidth] = useState<number | null>(null);
+  const refImageRef = useRef<HTMLImageElement>(null);
+
+  // Reset phase when project changes
+  useEffect(() => { setActivePhase(0); setRefImageWidth(null); }, [id]);
+
+  // Measure the first non-group image's rendered width to align concept images
+  useEffect(() => {
+    const el = refImageRef.current;
+    if (!el) return;
+    const obs = new ResizeObserver(() => setRefImageWidth(el.offsetWidth));
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [activePhase, id]);
+
   const goTo = (projectId: string) => {
     if (mainRef.current) mainRef.current.scrollTop = 0;
     navigate(`/work/${projectId}`);
   };
 
-  // Flatten all images into a single array for lightbox navigation
-  const allImages: string[] = project
-    ? project.images.flatMap((img) => {
-        const r = resolveImage(img);
-        return r.pair ? [r.src, r.pair] : [r.src];
-      })
+  // Use active phase images if phases exist, otherwise fall back to project.images
+  const displayImages: ProjectImageEntry[] = project
+    ? (project.phases ? project.phases[activePhase].images : project.images)
     : [];
+
+  // Flatten display images for lightbox navigation (skip groups — handled separately)
+  const allImages: string[] = displayImages.flatMap((img) => {
+    if (typeof img === "object" && "type" in img && img.type === "group") {
+      return (img as ProjectImageGroup).items.map((it) => it.src);
+    }
+    const r = resolveImage(img as string | ProjectImage);
+    return r.pair ? [r.src, r.pair] : [r.src];
+  });
 
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   const openedAtIndex = useRef<number | null>(null);
@@ -173,12 +196,17 @@ const ProjectDetail = () => {
 
             {/* Subtitle / Description */}
             {project.description && (
-              <p
-                className="font-body italic text-muted-foreground leading-snug"
-                style={{ fontSize: "13px", marginBottom: "24px" }}
-              >
-                {project.description}
-              </p>
+              <div style={{ marginBottom: "24px" }}>
+                {project.description.split("\n\n").map((para, i) => (
+                  <p
+                    key={i}
+                    className="font-body italic text-muted-foreground leading-snug"
+                    style={{ fontSize: "13px", marginBottom: "14px" }}
+                  >
+                    {para}
+                  </p>
+                ))}
+              </div>
             )}
 
             {/* Divider */}
@@ -203,18 +231,44 @@ const ProjectDetail = () => {
               </div>
             )}
 
+            {/* Body text */}
+            {project.body && (
+              <p
+                className="font-body text-muted-foreground leading-relaxed"
+                style={{ fontSize: "12px", marginTop: "24px" }}
+              >
+                {project.body}
+              </p>
+            )}
+
           </motion.div>
         </div>
       </div>
 
       {/* ── Right column: 75% — scrolls naturally with main ── */}
       <div className="flex-1 md:w-3/4 flex flex-col gap-4 px-4 pt-[48px] pb-[50px]">
+
+        {/* Phase tabs — only shown if project has phases */}
+        {project.phases && (
+          <div className="flex gap-8 mb-4">
+            {project.phases.map((phase: ProjectPhase, i: number) => (
+              <button
+                key={phase.label}
+                onClick={() => { setActivePhase(i); if (mainRef.current) mainRef.current.scrollTop = 0; }}
+                className={`font-body text-xs tracking-ultra-wide uppercase pb-2 border-b-2 transition-colors duration-300 ${
+                  activePhase === i
+                    ? "border-primary text-primary"
+                    : "border-transparent text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                {phase.label}
+              </button>
+            ))}
+          </div>
+        )}
+
         {(() => {
           let flatIdx = 0;
-          return project.images.map((img, i) => {
-          const resolved = resolveImage(img);
-          const myFlatIdx = flatIdx;
-          flatIdx += resolved.pair ? 2 : 1;
           const imgClass = "h-[calc(100vh-168px)] w-auto block mx-auto flex-shrink-0";
           const spreadClass = "h-[calc((100vh-168px)/2)] w-auto block mx-auto flex-shrink-0";
           const tallClass = "w-[calc((100vh-168px)*22/17)] h-auto block mx-auto flex-shrink-0";
@@ -224,42 +278,98 @@ const ProjectDetail = () => {
             setLightboxIndex(flatIndex);
           };
 
-          return resolved.pair ? (
-            <div key={i} className="flex flex-col gap-4 w-full">
+          return displayImages.map((img, i) => {
+            // ── Concept Group ──
+            if (typeof img === "object" && "type" in img && img.type === "group") {
+              const group = img as ProjectImageGroup;
+              const groupStartIdx = flatIdx;
+              flatIdx += group.items.length;
+              return (
+              <div key={`${activePhase}-group-${i}`} className="relative w-full flex flex-col gap-0">
+                {group.items.map((item, j) => (
+                  <React.Fragment key={j}>
+                    {/* Image — same centering & sizing as all other project images */}
+                    <div
+                      className="relative group cursor-zoom-in mx-auto flex-shrink-0"
+                      style={{ outline: "1.5px solid hsl(var(--primary))", width: refImageWidth ? `${refImageWidth}px` : "calc((100vh - 168px) * 8.5 / 11)" }}
+                      data-flat-index={groupStartIdx + j}
+                      onClick={() => handleOpen(groupStartIdx + j)}
+                    >
+                      <img src={item.src} alt={item.caption} className="w-full h-auto block" loading="lazy" />
+                      <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center pointer-events-none">
+                        <p className="font-display text-sm font-semibold text-white text-center px-4">{item.caption}</p>
+                      </div>
+                    </div>
+                    {j < group.items.length - 1 && (
+                      <div className="flex items-center justify-center py-2 text-primary" style={{ fontSize: "20px", lineHeight: 1 }}>↓</div>
+                    )}
+                  </React.Fragment>
+                ))}
+                {/* Divider beneath third image */}
+                <div className="mx-auto mt-6 h-px" style={{ width: refImageWidth ? `${refImageWidth}px` : "calc((100vh - 168px) * 8.5 / 11)", background: "hsl(var(--primary) / 0.4)" }} />
+
+                {/* Text — absolutely positioned to the right of the centred images */}
+                <div
+                  className="absolute flex flex-col"
+                  style={{
+                    top: 0,
+                    left: refImageWidth ? `calc(50% + ${refImageWidth / 2}px + 16px)` : "calc(50% + (100vh - 168px) * 8.5 / 22 + 16px)",
+                    width: refImageWidth ? `calc(50% - ${refImageWidth / 2}px - 32px)` : "180px",
+                  }}
+                >
+                  <h3 className="font-body text-[10px] tracking-ultra-wide uppercase text-primary mb-5">{group.title}</h3>
+                  <p className="font-body text-[12px] leading-relaxed text-muted-foreground">{group.text}</p>
+                </div>
+              </div>
+              );
+            }
+
+            // ── Regular image ──
+            const resolved = resolveImage(img as string | ProjectImage);
+            const myFlatIdx = flatIdx;
+            flatIdx += resolved.pair ? 2 : 1;
+
+            // Attach ref to first non-group image for width measurement
+            const isFirstRegular = !refImageWidth && i === displayImages.findIndex(im => !(typeof im === "object" && "type" in im && im.type === "group"));
+
+            return resolved.pair ? (
+              <div key={`${activePhase}-${i}`} className="flex flex-col gap-4 w-full">
+                <ImageWithOverlay
+                  src={resolved.src}
+                  alt={`${project.title} — View ${i + 1}a`}
+                  imgRef={isFirstRegular ? refImageRef : undefined}
+                  className={(resolved.tallImage ? tallClass : imgClass) + " block"}
+                  caption={resolved.caption}
+                  delay={i * 0.05}
+                  eager={i === 0}
+                  flatIndex={myFlatIdx}
+                  onOpen={handleOpen}
+                />
+                <ImageWithOverlay
+                  src={resolved.pair}
+                  alt={`${project.title} — View ${i + 1}b`}
+                  className={(resolved.tallImage ? tallClass : imgClass) + " block"}
+                  caption={resolved.captionPair ?? resolved.caption}
+                  delay={i * 0.05 + 0.05}
+                  flatIndex={myFlatIdx + 1}
+                  onOpen={handleOpen}
+                />
+              </div>
+            ) : (
               <ImageWithOverlay
+                key={`${activePhase}-${i}`}
                 src={resolved.src}
-                alt={`${project.title} — View ${i + 1}a`}
-                className={(resolved.tallImage ? tallClass : imgClass) + " block"}
+                alt={`${project.title} — View ${i + 1}`}
+                className={(resolved.tallImage ? tallClass : resolved.fullSpread ? spreadClass : imgClass) + " block"}
                 caption={resolved.caption}
                 delay={i * 0.05}
                 eager={i === 0}
                 flatIndex={myFlatIdx}
                 onOpen={handleOpen}
+                imgRef={isFirstRegular ? refImageRef : undefined}
               />
-              <ImageWithOverlay
-                src={resolved.pair}
-                alt={`${project.title} — View ${i + 1}b`}
-                className={(resolved.tallImage ? tallClass : imgClass) + " block"}
-                caption={resolved.captionPair ?? resolved.caption}
-                delay={i * 0.05 + 0.05}
-                flatIndex={myFlatIdx + 1}
-                onOpen={handleOpen}
-              />
-            </div>
-          ) : (
-            <ImageWithOverlay
-              key={i}
-              src={resolved.src}
-              alt={`${project.title} — View ${i + 1}`}
-              className={(resolved.tallImage ? tallClass : resolved.fullSpread ? spreadClass : imgClass) + " block"}
-              caption={resolved.caption}
-              delay={i * 0.05}
-              eager={i === 0}
-              flatIndex={myFlatIdx}
-              onOpen={handleOpen}
-            />
-          );
-        });
+            );
+          });
         })()}
       </div>
       </div>{/* ── end columns row ── */}

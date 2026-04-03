@@ -10,9 +10,10 @@ interface ProjectCardProps {
   aspectClass?: string;
   fixedHeight?: number;
   cropY?: number;
+  shiftX?: number;
 }
 
-const ProjectCard = ({ id, title, image, index, aspectClass = "aspect-[4/3]", fixedHeight, cropY = 0 }: ProjectCardProps) => {
+const ProjectCard = ({ id, title, image, index, aspectClass = "aspect-[4/3]", fixedHeight, cropY = 0, shiftX = 0 }: ProjectCardProps) => {
   return (
     <motion.div
       initial={{ opacity: 0, y: 40 }}
@@ -29,7 +30,12 @@ const ProjectCard = ({ id, title, image, index, aspectClass = "aspect-[4/3]", fi
             src={image}
             alt={title}
             className="w-full object-cover transition-transform duration-700 group-hover:scale-105"
-            style={cropY ? { height: `calc(100% + ${cropY * 2}px)`, marginTop: `-${cropY}px` } : { height: "100%" }}
+            style={{
+              height: cropY ? `calc(100% + ${cropY * 2}px)` : "100%",
+              marginTop: cropY ? `-${cropY}px` : undefined,
+              marginLeft: shiftX ? `${shiftX}px` : undefined,
+              width: "100%",
+            }}
             loading="lazy"
           />
           {/* Hover overlay */}

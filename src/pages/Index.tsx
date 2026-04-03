@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import heroImage from "@/assets/LIVING ROOM UPDATED.png";
+import heroImage from "@/assets/project1-images/ADU LIVING ROOM WATERCOLOR.png";
 import SectionHeader from "@/components/SectionHeader";
 import ProjectCard from "@/components/ProjectCard";
 import { projects } from "@/data/projects";

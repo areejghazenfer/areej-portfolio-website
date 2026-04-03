@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import SectionHeader from "@/components/SectionHeader";
 import ProjectCard from "@/components/ProjectCard";
@@ -14,19 +14,6 @@ type TabKey = (typeof tabs)[number]["key"];
 
 const Work = () => {
   const [activeTab, setActiveTab] = useState<TabKey>("interiors");
-  const card1Ref = useRef<HTMLDivElement>(null);
-  const [card1Height, setCard1Height] = useState<number | null>(null);
-
-  useEffect(() => {
-    const el = card1Ref.current;
-    if (!el) return;
-    const obs = new ResizeObserver(() => {
-      const img = el.querySelector(".overflow-hidden") as HTMLElement;
-      if (img) setCard1Height(img.offsetHeight);
-    });
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, [activeTab]);
 
   const filtered = projects.filter((p) => p.category === activeTab);
 
@@ -52,7 +39,7 @@ const Work = () => {
           ))}
         </div>
 
-        {/* Project Grid — 3 columns with generous gaps (Ro Rockett inspired) */}
+        {/* Project Grid */}
         <motion.div
           key={activeTab}
           initial={{ opacity: 0 }}
@@ -61,20 +48,14 @@ const Work = () => {
           className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-16"
         >
           {filtered.map((project, i) => (
-            <div
-              key={project.id}
-              className={i === 1 ? "md:col-span-2" : ""}
-              ref={i === 0 ? card1Ref : undefined}
-            >
+            <div key={project.id}>
               <ProjectCard
                 id={project.id}
                 title={project.title}
                 location={project.location}
                 image={project.image}
                 index={i}
-                aspectClass={i === 1 ? undefined : "aspect-[4/3]"}
-                fixedHeight={i === 1 ? card1Height ?? undefined : undefined}
-                cropY={i === 1 ? 40 : 0}
+                aspectClass="aspect-[4/3]"
               />
             </div>
           ))}
