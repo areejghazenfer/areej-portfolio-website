@@ -24,7 +24,6 @@ import p1_8 from "@/assets/project1-images/Page_8.jpg";
 import p2Hero from "@/assets/project2-images/LINKEDINPROFILEIMAGE.jpg";
 import p2_1L from "@/assets/project2-images/THE MINDS EYE/Individual Images/Minds_Eye_Page_1_L.jpg";
 import p2_1R from "@/assets/project2-images/THE MINDS EYE/Individual Images/Minds_Eye_Page_1_R.jpg";
-import p2_2 from "@/assets/project2-images/THE MINDS EYE/Spreads/Minds_Eye_Page_2_Full.jpg";
 import p2_3L from "@/assets/project2-images/THE MINDS EYE/Individual Images/Minds_Eye_Page_3_L.jpg";
 import p2_3R from "@/assets/project2-images/THE MINDS EYE/Individual Images/Minds_Eye_Page_3_R.jpg";
 import p2_4L from "@/assets/project2-images/THE MINDS EYE/Individual Images/Minds_Eye_Page_4_L.jpg";
@@ -118,7 +117,6 @@ export const projects: Project[] = [
     category: "interiors",
     image: project2,
     images: [
-      { src: p2_2, fullSpread: true },
       { src: p2_3L, pair: p2_3R },
       { src: p2_4L, pair: p2_4R },
       { src: p2_5L, pair: p2_5R },
@@ -137,7 +135,6 @@ export const projects: Project[] = [
             title: "CONCEPT SEQUENTIAL SECTIONAL MAPPING",
             text: "Examining the ordinary, this project analyzes an everyday object within an apartment living room to uncover the subtle narratives embedded in the familiar. It moves beyond logic to experience the miniature episodes that exist within moments of the mundane.",
           },
-          { src: p2_2, fullSpread: true },
           { src: p2_3L, pair: p2_3R },
         ],
       },
