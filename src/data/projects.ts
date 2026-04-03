@@ -33,12 +33,12 @@ import p2_5R from "@/assets/project2-images/THE MINDS EYE/Individual Images/Mind
 import p2_bookSketch from "@/assets/project2-images/Book sketch.png";
 import p2_conceptSection2 from "@/assets/project2-images/CONCEPT SECTION 2.png";
 import p2_img012 from "@/assets/project2-images/img012.jpg";
-import p2_set1 from "@/assets/project2-images/SET 1.1.png";
-import p2_set2 from "@/assets/project2-images/SET 2.1.png";
-import p2_set3 from "@/assets/project2-images/SET 3.1.png";
-import p2_set4 from "@/assets/project2-images/SET 4.1.png";
-import p2_set5 from "@/assets/project2-images/SET 5.1.png";
-import p2_set6 from "@/assets/project2-images/SET 6.1.png";
+import p2_sc001 from "@/assets/project2-images/SECTION CUT POTETICS OF SPACE/img001.jpg";
+import p2_sc002 from "@/assets/project2-images/SECTION CUT POTETICS OF SPACE/img002.jpg";
+import p2_sc003 from "@/assets/project2-images/SECTION CUT POTETICS OF SPACE/img003.jpg";
+import p2_sc004 from "@/assets/project2-images/SECTION CUT POTETICS OF SPACE/img004.jpg";
+import p2_sc005 from "@/assets/project2-images/SECTION CUT POTETICS OF SPACE/img005.jpg";
+import p2_sc006 from "@/assets/project2-images/SECTION CUT POTETICS OF SPACE/img006.jpg";
 
 export interface ProjectImage {
   src: string;
@@ -141,7 +141,7 @@ export const projects: Project[] = [
             ],
             title: "CONCEPT SEQUENTIAL SECTIONAL MAPPING",
             text: "Examining the ordinary, this project analyzes an everyday object within an apartment living room to uncover the subtle narratives embedded in the familiar. It moves beyond logic to experience the miniature episodes that exist within moments of the mundane.",
-            carousel: [p2_set1, p2_set2, p2_set3, p2_set4, p2_set5, p2_set6],
+            carousel: [p2_sc001, p2_sc002, p2_sc003, p2_sc004, p2_sc005, p2_sc006],
           },
           { src: p2_3L, pair: p2_3R },
         ],

@@ -45,9 +45,10 @@ const ProjectDetail = () => {
   const [refImageWidth, setRefImageWidth] = useState<number | null>(null);
   const refImageRef = useRef<HTMLImageElement>(null);
   const [carouselPage, setCarouselPage] = useState(0);
+  const [carouselLightboxIndex, setCarouselLightboxIndex] = useState<number | null>(null);
 
   // Reset phase + carousel when project changes
-  useEffect(() => { setActivePhase(0); setRefImageWidth(null); setCarouselPage(0); }, [id]);
+  useEffect(() => { setActivePhase(0); setRefImageWidth(null); setCarouselPage(0); setCarouselLightboxIndex(null); }, [id]);
 
   // Measure the first non-group image's rendered width to align concept images
   useEffect(() => {
@@ -68,7 +69,7 @@ const ProjectDetail = () => {
     ? (project.phases ? project.phases[activePhase].images : project.images)
     : [];
 
-  // Flatten display images for lightbox navigation (skip groups — handled separately)
+  // Flatten display images for lightbox navigation (carousel images are separate)
   const allImages: string[] = displayImages.flatMap((img) => {
     if (typeof img === "object" && "type" in img && img.type === "group") {
       return (img as ProjectImageGroup).items.map((it) => it.src);
@@ -313,7 +314,8 @@ const ProjectDetail = () => {
                   const pageItems = group.carousel.slice(carouselPage * perPage, (carouselPage + 1) * perPage);
                   const carouselWidth = refImageWidth ? `${refImageWidth}px` : "calc((100vh - 168px) * 8.5 / 11)";
                   return (
-                    <div className="mx-auto mt-4 flex items-center gap-3" style={{ width: carouselWidth }}>
+                    <React.Fragment>
+                    <div className="mx-auto mt-8 flex items-center gap-3" style={{ width: carouselWidth }}>
                       <button
                         onClick={() => setCarouselPage(p => Math.max(0, p - 1))}
                         disabled={carouselPage === 0}
@@ -322,9 +324,19 @@ const ProjectDetail = () => {
                         <ChevronLeft size={20} />
                       </button>
                       <div className="flex flex-1 gap-2">
-                        {pageItems.map((src, k) => (
-                          <img key={k} src={src} alt="" className="flex-1 min-w-0 h-auto object-cover block" loading="lazy" />
-                        ))}
+                        {pageItems.map((src, k) => {
+                          const absoluteIdx = carouselPage * perPage + k;
+                          return (
+                            <img
+                              key={k}
+                              src={src}
+                              alt=""
+                              className="flex-1 min-w-0 h-auto object-cover block cursor-zoom-in"
+                              loading="lazy"
+                              onClick={() => setCarouselLightboxIndex(absoluteIdx)}
+                            />
+                          );
+                        })}
                       </div>
                       <button
                         onClick={() => setCarouselPage(p => Math.min(totalPages - 1, p + 1))}
@@ -334,6 +346,10 @@ const ProjectDetail = () => {
                         <ChevronRight size={20} />
                       </button>
                     </div>
+                    <p className="mx-auto mt-2 font-body text-[10px] tracking-ultra-wide text-muted-foreground/60 text-center" style={{ width: carouselWidth }}>
+                      {carouselPage * perPage + 1}–{Math.min((carouselPage + 1) * perPage, group.carousel!.length)} / {group.carousel!.length}
+                    </p>
+                    </React.Fragment>
                   );
                 })()}
 
@@ -521,6 +537,64 @@ const ProjectDetail = () => {
             </button>
           </motion.div>
         )}
+      </AnimatePresence>
+
+      {/* ── Carousel Lightbox ── */}
+      <AnimatePresence>
+        {carouselLightboxIndex !== null && (() => {
+          const carouselImages: string[] = displayImages.flatMap((img) =>
+            typeof img === "object" && "type" in img && img.type === "group"
+              ? ((img as ProjectImageGroup).carousel ?? [])
+              : []
+          );
+          const total = carouselImages.length;
+          const prev = () => setCarouselLightboxIndex(i => i === null ? null : (i - 1 + total) % total);
+          const next = () => setCarouselLightboxIndex(i => i === null ? null : (i + 1) % total);
+          return (
+            <motion.div
+              className="fixed inset-0 z-[60] flex items-center justify-center"
+              style={{ background: "rgba(0,0,0,0.9)" }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setCarouselLightboxIndex(null)}
+            >
+              <button
+                className="absolute top-6 right-6 text-white hover:text-white/60 transition-colors z-10"
+                onClick={() => setCarouselLightboxIndex(null)}
+              >
+                <X size={28} />
+              </button>
+              <button
+                className="absolute left-6 text-white hover:text-white/60 transition-colors z-10"
+                onClick={(e) => { e.stopPropagation(); prev(); }}
+              >
+                <ChevronLeft size={40} />
+              </button>
+              <div className="flex flex-col items-center gap-3" onClick={(e) => e.stopPropagation()}>
+                <motion.img
+                  key={carouselLightboxIndex}
+                  src={carouselImages[carouselLightboxIndex]}
+                  alt="Enlarged view"
+                  className="max-h-[85vh] max-w-[85vw] object-contain"
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  transition={{ duration: 0.2 }}
+                />
+                <p className="text-white/60 text-sm font-body tracking-widest">
+                  {carouselLightboxIndex + 1} / {total}
+                </p>
+              </div>
+              <button
+                className="absolute right-6 text-white hover:text-white/60 transition-colors z-10"
+                onClick={(e) => { e.stopPropagation(); next(); }}
+              >
+                <ChevronRight size={40} />
+              </button>
+            </motion.div>
+          );
+        })()}
       </AnimatePresence>
     </main>
   );
