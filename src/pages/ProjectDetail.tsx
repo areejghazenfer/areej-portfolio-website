@@ -46,9 +46,24 @@ const ProjectDetail = () => {
   const refImageRef = useRef<HTMLImageElement>(null);
   const [carouselPage, setCarouselPage] = useState(0);
   const [carouselLightboxIndex, setCarouselLightboxIndex] = useState<number | null>(null);
+  const [carouselOffsetTop, setCarouselOffsetTop] = useState(0);
+  const carouselRowRef = useRef<HTMLDivElement>(null);
+  const [carousel2Page, setCarousel2Page] = useState(0);
+  const [carousel2LightboxIndex, setCarousel2LightboxIndex] = useState<number | null>(null);
 
   // Reset phase + carousel when project changes
-  useEffect(() => { setActivePhase(0); setRefImageWidth(null); setCarouselPage(0); setCarouselLightboxIndex(null); }, [id]);
+  useEffect(() => { setActivePhase(0); setRefImageWidth(null); setCarouselPage(0); setCarouselLightboxIndex(null); setCarouselOffsetTop(0); setCarousel2Page(0); setCarousel2LightboxIndex(null); }, [id]);
+
+  // Measure carousel row's offsetTop relative to its group container
+  useLayoutEffect(() => {
+    const el = carouselRowRef.current;
+    if (!el) return;
+    const measure = () => setCarouselOffsetTop(el.offsetTop);
+    measure();
+    const obs = new ResizeObserver(measure);
+    obs.observe(document.body);
+    return () => obs.disconnect();
+  }, [activePhase, id, refImageWidth]);
 
   // Measure the first non-group image's rendered width to align concept images
   useEffect(() => {
@@ -288,6 +303,52 @@ const ProjectDetail = () => {
               flatIdx += group.items.length;
               return (
               <div key={`${activePhase}-group-${i}`} className="relative w-full flex flex-col gap-0">
+                {/* Second carousel — books images, 4 per page — at top */}
+                {group.carousel2 && group.carousel2.length > 0 && (() => {
+                  const perPage2 = 4;
+                  const totalPages2 = Math.ceil(group.carousel2.length / perPage2);
+                  const pageItems2 = group.carousel2.slice(carousel2Page * perPage2, (carousel2Page + 1) * perPage2);
+                  const carouselWidth2 = refImageWidth ? `${refImageWidth}px` : "calc((100vh - 168px) * 8.5 / 11)";
+                  return (
+                    <React.Fragment>
+                    <div className="mx-auto mb-8 flex items-center gap-3" style={{ width: carouselWidth2 }}>
+                      <button
+                        onClick={() => setCarousel2Page(p => Math.max(0, p - 1))}
+                        disabled={carousel2Page === 0}
+                        className="flex-shrink-0 text-primary disabled:text-primary/20 transition-colors"
+                      >
+                        <ChevronLeft size={20} />
+                      </button>
+                      <div className="flex flex-1 gap-2">
+                        {pageItems2.map((src, k) => {
+                          const absoluteIdx = carousel2Page * perPage2 + k;
+                          return (
+                            <img
+                              key={k}
+                              src={src}
+                              alt=""
+                              className="flex-1 min-w-0 h-auto object-cover block cursor-zoom-in"
+                              loading="lazy"
+                              onClick={() => setCarousel2LightboxIndex(absoluteIdx)}
+                            />
+                          );
+                        })}
+                      </div>
+                      <button
+                        onClick={() => setCarousel2Page(p => Math.min(totalPages2 - 1, p + 1))}
+                        disabled={carousel2Page === totalPages2 - 1}
+                        className="flex-shrink-0 text-primary disabled:text-primary/20 transition-colors"
+                      >
+                        <ChevronRight size={20} />
+                      </button>
+                    </div>
+                    <p className="mx-auto mb-4 font-body text-[10px] tracking-ultra-wide text-muted-foreground/60 text-center" style={{ width: carouselWidth2 }}>
+                      {carousel2Page * perPage2 + 1}–{Math.min((carousel2Page + 1) * perPage2, group.carousel2!.length)} / {group.carousel2!.length}
+                    </p>
+                    </React.Fragment>
+                  );
+                })()}
+
                 {group.items.map((item, j) => (
                   <React.Fragment key={j}>
                     {/* Image — same centering & sizing as all other project images */}
@@ -315,7 +376,7 @@ const ProjectDetail = () => {
                   const carouselWidth = refImageWidth ? `${refImageWidth}px` : "calc((100vh - 168px) * 8.5 / 11)";
                   return (
                     <React.Fragment>
-                    <div className="mx-auto mt-8 flex items-center gap-3" style={{ width: carouselWidth }}>
+                    <div ref={carouselRowRef} className="mx-auto mt-8 flex items-center gap-3" style={{ width: carouselWidth }}>
                       <button
                         onClick={() => setCarouselPage(p => Math.max(0, p - 1))}
                         disabled={carouselPage === 0}
@@ -365,9 +426,21 @@ const ProjectDetail = () => {
                     width: refImageWidth ? `calc(50% - ${refImageWidth / 2}px - 32px)` : "180px",
                   }}
                 >
-                  <h3 className="font-body text-[10px] tracking-ultra-wide uppercase text-primary mb-5">{group.title}</h3>
+                  {group.title && <h3 className="font-body text-[10px] tracking-ultra-wide uppercase text-primary mb-5">{group.title}</h3>}
                   <p className="font-body text-[12px] leading-relaxed text-muted-foreground">{group.text}</p>
                 </div>
+                {group.carouselText && (
+                  <div
+                    className="absolute"
+                    style={{
+                      top: carouselOffsetTop,
+                      left: refImageWidth ? `calc(50% + ${refImageWidth / 2}px + 16px)` : "calc(50% + (100vh - 168px) * 8.5 / 22 + 16px)",
+                      width: refImageWidth ? `calc(50% - ${refImageWidth / 2}px - 32px)` : "180px",
+                    }}
+                  >
+                    <p className="font-body text-[12px] leading-relaxed text-muted-foreground">{group.carouselText}</p>
+                  </div>
+                )}
               </div>
               );
             }
@@ -584,6 +657,64 @@ const ProjectDetail = () => {
                 />
                 <p className="text-white/60 text-sm font-body tracking-widest">
                   {carouselLightboxIndex + 1} / {total}
+                </p>
+              </div>
+              <button
+                className="absolute right-6 text-white hover:text-white/60 transition-colors z-10"
+                onClick={(e) => { e.stopPropagation(); next(); }}
+              >
+                <ChevronRight size={40} />
+              </button>
+            </motion.div>
+          );
+        })()}
+      </AnimatePresence>
+
+      {/* ── Carousel 2 Lightbox ── */}
+      <AnimatePresence>
+        {carousel2LightboxIndex !== null && (() => {
+          const carousel2Images: string[] = displayImages.flatMap((img) =>
+            typeof img === "object" && "type" in img && img.type === "group"
+              ? ((img as ProjectImageGroup).carousel2 ?? [])
+              : []
+          );
+          const total = carousel2Images.length;
+          const prev = () => setCarousel2LightboxIndex(i => i === null ? null : (i - 1 + total) % total);
+          const next = () => setCarousel2LightboxIndex(i => i === null ? null : (i + 1) % total);
+          return (
+            <motion.div
+              className="fixed inset-0 z-[60] flex items-center justify-center"
+              style={{ background: "rgba(0,0,0,0.9)" }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setCarousel2LightboxIndex(null)}
+            >
+              <button
+                className="absolute top-6 right-6 text-white hover:text-white/60 transition-colors z-10"
+                onClick={() => setCarousel2LightboxIndex(null)}
+              >
+                <X size={28} />
+              </button>
+              <button
+                className="absolute left-6 text-white hover:text-white/60 transition-colors z-10"
+                onClick={(e) => { e.stopPropagation(); prev(); }}
+              >
+                <ChevronLeft size={40} />
+              </button>
+              <div className="flex flex-col items-center gap-3" onClick={(e) => e.stopPropagation()}>
+                <motion.img
+                  key={carousel2LightboxIndex}
+                  src={carousel2Images[carousel2LightboxIndex]}
+                  alt="Enlarged view"
+                  className="max-h-[85vh] max-w-[85vw] object-contain"
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  transition={{ duration: 0.2 }}
+                />
+                <p className="text-white/60 text-sm font-body tracking-widest">
+                  {carousel2LightboxIndex + 1} / {total}
                 </p>
               </div>
               <button

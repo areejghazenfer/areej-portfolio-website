@@ -1,3 +1,15 @@
+const _booksModules = import.meta.glob<{ default: string }>(
+  "../assets/project2-images/BOOKS/*.jpg",
+  { eager: true }
+);
+const booksImages: string[] = Object.entries(_booksModules)
+  .sort(([a], [b]) => {
+    const numA = parseInt(a.match(/P(\d+)/)?.[1] ?? "0");
+    const numB = parseInt(b.match(/P(\d+)/)?.[1] ?? "0");
+    return numA - numB;
+  })
+  .map(([, m]) => m.default);
+
 import project1Hero from "@/assets/project1-images/LIVING ROOM UPDATED.png";
 import project1 from "@/assets/project-1.jpg";
 import project2 from "@/assets/project2-images/PROJECT 2 COVER IMAGE.jpg";
@@ -59,6 +71,8 @@ export interface ProjectImageGroup {
   title: string;
   text: string;
   carousel?: string[];
+  carouselText?: string;
+  carousel2?: string[];
 }
 
 export type ProjectImageEntry = string | ProjectImage | ProjectImageGroup;
@@ -139,9 +153,11 @@ export const projects: Project[] = [
               { src: p2_conceptSection2,  caption: "Conceptual Section Cut of Page Describing the Writing Process" },
               { src: p2_img012,           caption: "Conceptual Section Cut of Page 12 in The Poetics of Space." },
             ],
-            title: "CONCEPT SEQUENTIAL SECTIONAL MAPPING",
-            text: "Examining the ordinary, this project analyzes an everyday object within an apartment living room to uncover the subtle narratives embedded in the familiar. It moves beyond logic to experience the miniature episodes that exist within moments of the mundane.",
+            title: "",
+            text: "Sequential sectional mapping as a lens into the miniature world, where imagination operates outside the limits of ordinary perception.",
             carousel: [p2_sc001, p2_sc002, p2_sc003, p2_sc004, p2_sc005, p2_sc006],
+            carouselText: "The same section cut method applied to all 278 pages of The Poetics of Space. Each page produces a different result. Repetition is not sameness.",
+            carousel2: booksImages,
           },
           { src: p2_3L, pair: p2_3R },
         ],
