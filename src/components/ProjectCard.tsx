@@ -7,9 +7,12 @@ interface ProjectCardProps {
   location: string;
   image: string;
   index: number;
+  aspectClass?: string;
+  fixedHeight?: number;
+  cropY?: number;
 }
 
-const ProjectCard = ({ id, title, image, index }: ProjectCardProps) => {
+const ProjectCard = ({ id, title, image, index, aspectClass = "aspect-[4/3]", fixedHeight, cropY = 0 }: ProjectCardProps) => {
   return (
     <motion.div
       initial={{ opacity: 0, y: 40 }}
@@ -18,11 +21,15 @@ const ProjectCard = ({ id, title, image, index }: ProjectCardProps) => {
       transition={{ duration: 0.6, delay: index * 0.1 }}
     >
       <Link to={`/work/${id}`} className="group block">
-        <div className="aspect-[4/3] overflow-hidden mb-4 relative">
+        <div
+          className={`${fixedHeight ? "" : aspectClass} overflow-hidden mb-4 relative`}
+          style={fixedHeight ? { height: fixedHeight } : undefined}
+        >
           <img
             src={image}
             alt={title}
-            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+            className="w-full object-cover transition-transform duration-700 group-hover:scale-105"
+            style={cropY ? { height: `calc(100% + ${cropY * 2}px)`, marginTop: `-${cropY}px` } : { height: "100%" }}
             loading="lazy"
           />
           {/* Hover overlay */}
