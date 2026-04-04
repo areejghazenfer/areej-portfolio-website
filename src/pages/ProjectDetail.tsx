@@ -342,31 +342,29 @@ const ProjectDetail = () => {
                     <React.Fragment>
                     <div className="w-full mb-8 flex items-center gap-3">
                       <button
-                        onClick={() => setCarousel2Page(p => Math.max(0, p - 1))}
-                        disabled={carousel2Page === 0}
-                        className="flex-shrink-0 text-primary disabled:text-primary/20 transition-colors"
+                        onClick={() => setCarousel2Page(p => (p - 1 + totalPages2) % totalPages2)}
+                        className="flex-shrink-0 text-primary transition-colors"
                       >
                         <ChevronLeft size={20} />
                       </button>
-                      <div className="flex flex-1 gap-2">
+                      <div className="grid flex-1 gap-2" style={{ gridTemplateColumns: "repeat(6, 1fr)" }}>
                         {pageItems2.map((src, k) => {
                           const absoluteIdx = carousel2Page * perPage2 + k;
                           return (
-                            <img
-                              key={k}
-                              src={src}
-                              alt=""
-                              className="flex-1 min-w-0 h-auto object-cover block cursor-zoom-in"
-                              loading="lazy"
-                              onClick={() => setCarousel2LightboxIndex(absoluteIdx)}
-                            />
+                            <div key={k} className="relative overflow-hidden cursor-zoom-in" style={{ aspectRatio: "1/1" }} onClick={() => setCarousel2LightboxIndex(absoluteIdx)}>
+                              <img
+                                src={src}
+                                alt=""
+                                className="absolute inset-0 w-full h-full object-cover block"
+                                loading="lazy"
+                              />
+                            </div>
                           );
                         })}
                       </div>
                       <button
-                        onClick={() => setCarousel2Page(p => Math.min(totalPages2 - 1, p + 1))}
-                        disabled={carousel2Page === totalPages2 - 1}
-                        className="flex-shrink-0 text-primary disabled:text-primary/20 transition-colors"
+                        onClick={() => setCarousel2Page(p => (p + 1) % totalPages2)}
+                        className="flex-shrink-0 text-primary transition-colors"
                       >
                         <ChevronRight size={20} />
                       </button>
