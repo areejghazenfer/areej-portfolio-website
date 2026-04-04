@@ -2,7 +2,7 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import React, { useEffect, useLayoutEffect, useRef, useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, Instagram, Linkedin, X, ChevronLeft, ChevronRight } from "lucide-react";
-import { projects, ProjectImage, ProjectImageGroup, ProjectImageEntry, ProjectDetail, ProjectPhase } from "@/data/projects";
+import { projects, ProjectImage, ProjectImageGroup, ProjectImagePortraitPair, ProjectImageEntry, ProjectDetail, ProjectPhase } from "@/data/projects";
 
 const resolveImage = (img: string | ProjectImage) =>
   typeof img === "string" ? { src: img } : img;
@@ -48,11 +48,24 @@ const ProjectDetail = () => {
   const [carouselLightboxIndex, setCarouselLightboxIndex] = useState<number | null>(null);
   const [carouselOffsetTop, setCarouselOffsetTop] = useState(0);
   const carouselRowRef = useRef<HTMLDivElement>(null);
+  const bookSketchRef = useRef<HTMLDivElement>(null);
+  const [bookSketchOffsetTop, setBookSketchOffsetTop] = useState(0);
   const [carousel2Page, setCarousel2Page] = useState(0);
   const [carousel2LightboxIndex, setCarousel2LightboxIndex] = useState<number | null>(null);
 
   // Reset phase + carousel when project changes
-  useEffect(() => { setActivePhase(0); setRefImageWidth(null); setCarouselPage(0); setCarouselLightboxIndex(null); setCarouselOffsetTop(0); setCarousel2Page(0); setCarousel2LightboxIndex(null); }, [id]);
+  useEffect(() => { setActivePhase(0); setRefImageWidth(null); setCarouselPage(0); setCarouselLightboxIndex(null); setCarouselOffsetTop(0); setCarousel2Page(0); setCarousel2LightboxIndex(null); setBookSketchOffsetTop(0); }, [id]);
+
+  // Measure book sketch's offsetTop relative to its group container
+  useLayoutEffect(() => {
+    const el = bookSketchRef.current;
+    if (!el) return;
+    const measure = () => setBookSketchOffsetTop(el.offsetTop);
+    measure();
+    const obs = new ResizeObserver(measure);
+    obs.observe(document.body);
+    return () => obs.disconnect();
+  }, [activePhase, id, refImageWidth]);
 
   // Measure carousel row's offsetTop relative to its group container
   useLayoutEffect(() => {
@@ -88,6 +101,10 @@ const ProjectDetail = () => {
   const allImages: string[] = displayImages.flatMap((img) => {
     if (typeof img === "object" && "type" in img && img.type === "group") {
       return (img as ProjectImageGroup).items.map((it) => it.src);
+    }
+    if (typeof img === "object" && "type" in img && img.type === "portraitPair") {
+      const pp = img as ProjectImagePortraitPair;
+      return [pp.left, pp.right];
     }
     const r = resolveImage(img as string | ProjectImage);
     return r.pair ? [r.src, r.pair] : [r.src];
@@ -265,6 +282,16 @@ const ProjectDetail = () => {
       {/* ── Right column: 75% — scrolls naturally with main ── */}
       <div className="flex-1 md:w-3/4 flex flex-col gap-4 px-4 pt-[48px] pb-[50px]">
 
+        {/* Hidden reference image — measures rendered width for page sizing */}
+        {project.referenceImageSrc && (
+          <img
+            ref={refImageRef}
+            src={project.referenceImageSrc}
+            aria-hidden="true"
+            className="h-[calc(100vh-168px)] w-auto opacity-0 absolute pointer-events-none"
+          />
+        )}
+
         {/* Phase tabs — only shown if project has phases */}
         {project.phases && (
           <div className="flex gap-8 mb-4">
@@ -353,6 +380,7 @@ const ProjectDetail = () => {
                   <React.Fragment key={j}>
                     {/* Image — same centering & sizing as all other project images */}
                     <div
+                      ref={j === 0 ? bookSketchRef : undefined}
                       className="relative group cursor-zoom-in mx-auto flex-shrink-0"
                       style={{ outline: "1.5px solid hsl(var(--primary))", width: refImageWidth ? `${refImageWidth}px` : "calc((100vh - 168px) * 8.5 / 11)" }}
                       data-flat-index={groupStartIdx + j}
@@ -421,7 +449,7 @@ const ProjectDetail = () => {
                 <div
                   className="absolute flex flex-col"
                   style={{
-                    top: 0,
+                    top: bookSketchOffsetTop,
                     left: refImageWidth ? `calc(50% + ${refImageWidth / 2}px + 16px)` : "calc(50% + (100vh - 168px) * 8.5 / 22 + 16px)",
                     width: refImageWidth ? `calc(50% - ${refImageWidth / 2}px - 32px)` : "180px",
                   }}
@@ -445,13 +473,78 @@ const ProjectDetail = () => {
               );
             }
 
+            // ── Concept-width image (sized to match concept page) ──
+            if (typeof img === "object" && !("type" in img) && (img as ProjectImage).conceptWidth) {
+              const cw = img as ProjectImage;
+              const myIdx = flatIdx++;
+              const w = refImageWidth ? `${refImageWidth}px` : "calc((100vh - 168px) * 8.5 / 11)";
+              return (
+                <motion.div
+                  key={`${activePhase}-${i}`}
+                  className="relative group mx-auto cursor-zoom-in flex-shrink-0"
+                  style={{ width: w }}
+                  data-flat-index={myIdx}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: i * 0.05 }}
+                  onClick={() => handleOpen(myIdx)}
+                >
+                  <img src={cw.src} alt={`${project.title} — View ${i + 1}`} className="w-full h-auto block" loading="lazy" />
+                  {cw.caption && (
+                    <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center pointer-events-none">
+                      <p className="font-display text-base font-semibold tracking-wide text-white text-center px-6">{cw.caption}</p>
+                    </div>
+                  )}
+                </motion.div>
+              );
+            }
+
+            // ── Portrait Pair ──
+            if (typeof img === "object" && "type" in img && img.type === "portraitPair") {
+              const pp = img as ProjectImagePortraitPair;
+              const leftIdx = flatIdx;
+              const rightIdx = flatIdx + 1;
+              flatIdx += 2;
+              const pairWidth = refImageWidth ? `${refImageWidth}px` : "calc((100vh - 168px) * 8.5 / 11)";
+              return (
+                <motion.div
+                  key={`${activePhase}-${i}`}
+                  className="mx-auto flex gap-4"
+                  style={{ width: pairWidth }}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: i * 0.05 }}
+                >
+                  <div className="relative group flex-1 cursor-zoom-in overflow-hidden" style={{ aspectRatio: "2/3" }} data-flat-index={leftIdx} onClick={() => handleOpen(leftIdx)}>
+                    <img src={pp.left} alt="" className="w-full h-full object-cover block" loading="lazy" />
+                    {pp.captionLeft && (
+                      <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center pointer-events-none">
+                        <p className="font-display text-sm font-semibold text-white text-center px-4">{pp.captionLeft}</p>
+                      </div>
+                    )}
+                  </div>
+                  <div className="relative group flex-1 cursor-zoom-in overflow-hidden" style={{ aspectRatio: "2/3" }} data-flat-index={rightIdx} onClick={() => handleOpen(rightIdx)}>
+                    <img src={pp.right} alt="" className="w-full h-full object-cover block" loading="lazy" />
+                    {pp.captionRight && (
+                      <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center pointer-events-none">
+                        <p className="font-display text-sm font-semibold text-white text-center px-4">{pp.captionRight}</p>
+                      </div>
+                    )}
+                  </div>
+                </motion.div>
+              );
+            }
+
             // ── Regular image ──
             const resolved = resolveImage(img as string | ProjectImage);
             const myFlatIdx = flatIdx;
             flatIdx += resolved.pair ? 2 : 1;
 
-            // Attach ref to first non-group image for width measurement
-            const isFirstRegular = !refImageWidth && i === displayImages.findIndex(im => !(typeof im === "object" && "type" in im && im.type === "group"));
+            // Attach ref to first non-group image for width measurement (skip portraitPair)
+            const isFirstRegular = !refImageWidth && i === displayImages.findIndex(im => {
+              if (typeof im === "object" && "type" in im && (im.type === "group" || im.type === "portraitPair")) return false;
+              return true;
+            });
 
             return resolved.pair ? (
               <div key={`${activePhase}-${i}`} className="flex flex-col gap-4 w-full">

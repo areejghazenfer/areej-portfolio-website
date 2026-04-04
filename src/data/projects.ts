@@ -51,7 +51,9 @@ import p2_sc003 from "@/assets/project2-images/SECTION CUT POTETICS OF SPACE/img
 import p2_sc004 from "@/assets/project2-images/SECTION CUT POTETICS OF SPACE/img004.jpg";
 import p2_sc005 from "@/assets/project2-images/SECTION CUT POTETICS OF SPACE/img005.jpg";
 import p2_sc006 from "@/assets/project2-images/SECTION CUT POTETICS OF SPACE/img006.jpg";
-
+import p2_q1 from "@/assets/project2-images/Minds_Eye_Page_3_Q1.jpg";
+import p2_q4 from "@/assets/project2-images/Minds_Eye_Page_3_Q4.jpg";
+import p2_zoomedInstallation from "@/assets/project2-images/zoomed in installation.jpg";
 export interface ProjectImage {
   src: string;
   /** If set, this image is displayed side-by-side with a paired image */
@@ -63,6 +65,8 @@ export interface ProjectImage {
   fullSpread?: boolean;
   /** Portrait image that should match the width of standard landscape pages, allowing it to be taller */
   tallImage?: boolean;
+  /** Render at the measured width of a single concept page image */
+  conceptWidth?: boolean;
 }
 
 export interface ProjectImageGroup {
@@ -75,7 +79,15 @@ export interface ProjectImageGroup {
   carousel2?: string[];
 }
 
-export type ProjectImageEntry = string | ProjectImage | ProjectImageGroup;
+export interface ProjectImagePortraitPair {
+  type: "portraitPair";
+  left: string;
+  right: string;
+  captionLeft?: string;
+  captionRight?: string;
+}
+
+export type ProjectImageEntry = string | ProjectImage | ProjectImageGroup | ProjectImagePortraitPair;
 
 export interface ProjectDetail {
   label: string;
@@ -99,6 +111,8 @@ export interface Project {
   year: string;
   details?: ProjectDetail[];
   body?: string;
+  /** Hidden reference image whose rendered width sets the page-width for this project */
+  referenceImageSrc?: string;
 }
 
 export const projects: Project[] = [
@@ -159,7 +173,8 @@ export const projects: Project[] = [
             carouselText: "The same section cut method applied to all 278 pages of The Poetics of Space. Each page produces a different result. Repetition is not sameness.",
             carousel2: booksImages,
           },
-          { src: p2_3L, pair: p2_3R },
+          { src: p2_q4, conceptWidth: true, caption: "Section Cut Methodology" },
+          { type: "portraitPair", left: p2_q1, right: p2_zoomedInstallation, captionLeft: "135 Page (Double-Sided) Installation Located In Stairwell", captionRight: "Installation Close Up" },
         ],
       },
       {
@@ -178,6 +193,7 @@ export const projects: Project[] = [
       { label: "Year", value: "2023" },
     ],
     body: "The Mind's Eye examines how perception constructs meaning through repetition and iteration. Shifting between scales, formats, and sequences, the project reveals that understanding space is inseparable from how we see and imagine it. Moving between miniature and macro worlds, it questions the boundaries of observation and imagination, suggesting that every act of seeing is also an act of interpretation.",
+    referenceImageSrc: p1_2L,
   },
   {
     id: "cedar-villa",
