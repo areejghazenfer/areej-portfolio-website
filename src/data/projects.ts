@@ -38,10 +38,6 @@ import p2_1L from "@/assets/project2-images/THE MINDS EYE/Individual Images/Mind
 import p2_1R from "@/assets/project2-images/THE MINDS EYE/Individual Images/Minds_Eye_Page_1_R.jpg";
 import p2_3L from "@/assets/project2-images/THE MINDS EYE/Individual Images/Minds_Eye_Page_3_L.jpg";
 import p2_3R from "@/assets/project2-images/THE MINDS EYE/Individual Images/Minds_Eye_Page_3_R.jpg";
-import p2_4L from "@/assets/project2-images/THE MINDS EYE/Individual Images/Minds_Eye_Page_4_L.jpg";
-import p2_4R from "@/assets/project2-images/THE MINDS EYE/Individual Images/Minds_Eye_Page_4_R.jpg";
-import p2_5L from "@/assets/project2-images/THE MINDS EYE/Individual Images/Minds_Eye_Page_5_L.jpg";
-import p2_5R from "@/assets/project2-images/THE MINDS EYE/Individual Images/Minds_Eye_Page_5_R.jpg";
 import p2_bookSketch from "@/assets/project2-images/Book sketch.png";
 import p2_conceptSection2 from "@/assets/project2-images/CONCEPT SECTION 2.png";
 import p2_img012 from "@/assets/project2-images/img012.jpg";
@@ -55,17 +51,10 @@ import p2_q1 from "@/assets/project2-images/Minds_Eye_Page_3_Q1.jpg";
 import p2_q4 from "@/assets/project2-images/Minds_Eye_Page_3_Q4.jpg";
 import p2_zoomedInstallation from "@/assets/project2-images/zoomed in installation.jpg";
 
-// Project 2 — Phase 2 SET images
-import p2_set1  from "@/assets/project2-images/SET 1.1.png";
-import p2_set2  from "@/assets/project2-images/SET 2.1.png";
-import p2_set3  from "@/assets/project2-images/SET 3.1.png";
-import p2_set4  from "@/assets/project2-images/SET 4.1.png";
-import p2_set6  from "@/assets/project2-images/SET 6.1.png";
-import p2_set7  from "@/assets/project2-images/SET 7.1.png";
-import p2_set8  from "@/assets/project2-images/SET 8.1.png";
-import p2_set9  from "@/assets/project2-images/SET 9.1.png";
-import p2_set10 from "@/assets/project2-images/SET 10.1.png";
-import p2_set11 from "@/assets/project2-images/SET 11.1.png";
+// Project 2 — Phase 2 Model images
+import p2_model0 from "@/assets/project2-images/Models/0 (1).jpg";
+import p2_model1 from "@/assets/project2-images/Models/1 (1).jpg";
+import p2_model2 from "@/assets/project2-images/Models/2 (1).jpg";
 export interface ProjectImage {
   src: string;
   /** If set, this image is displayed side-by-side with a paired image */
@@ -199,25 +188,9 @@ export const projects: Project[] = [
       {
         label: "Phase 2",
         images: [
-          {
-            type: "grid",
-            columns: 5,
-            text: "This study examines how format shapes the perception of space through the creation of miniature environments. By extending beyond the scale of the human eye, the work reveals how multiple versions of a space can exist and be understood at once. Each abstract form remains open to interpretation, allowing perception and experience to influence how the space is read and engaged.",
-            items: [
-              { src: p2_set1,  caption: "Apartment Iteration 1" },
-              { src: p2_set2,  caption: "Apartment Iteration 2" },
-              { src: p2_set3,  caption: "Apartment Iteration 3" },
-              { src: p2_set4,  caption: "Apartment Iteration 4" },
-              { src: p2_set6,  caption: "Apartment Iteration 5" },
-              { src: p2_set7,  caption: "Apartment Iteration 6" },
-              { src: p2_set8,  caption: "Apartment Iteration 7" },
-              { src: p2_set9,  caption: "Apartment Iteration 8" },
-              { src: p2_set10, caption: "Apartment Iteration 9" },
-              { src: p2_set11, caption: "Apartment Iteration 10" },
-            ],
-          },
-          { src: p2_4L, pair: p2_4R },
-          { src: p2_5L, pair: p2_5R },
+          { src: p2_model0 },
+          { src: p2_model1 },
+          { src: p2_model2 },
         ],
       },
     ],
