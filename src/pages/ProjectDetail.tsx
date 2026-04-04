@@ -510,33 +510,45 @@ const ProjectDetail = () => {
               flatIdx += grid.items.length;
               const gridWidth = refImageWidth ? `${refImageWidth}px` : "calc((100vh - 168px) * 8.5 / 11)";
               return (
-                <div
-                  key={`${activePhase}-grid-${i}`}
-                  className="mx-auto"
-                  style={{
-                    width: gridWidth,
-                    display: "grid",
-                    gridTemplateColumns: `repeat(${grid.columns}, 1fr)`,
-                    gap: "8px",
-                  }}
-                >
-                  {grid.items.map((item, j) => {
-                    const myIdx = gridStartIdx + j;
-                    return (
-                      <div
-                        key={j}
-                        className="relative group cursor-zoom-in overflow-hidden"
-                        style={{ aspectRatio: "1/2" }}
-                        data-flat-index={myIdx}
-                        onClick={() => handleOpen(myIdx)}
-                      >
-                        <img src={item.src} alt={item.caption} className="absolute inset-0 w-full h-full object-contain block" loading="lazy" />
-                        <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center pointer-events-none">
-                          <p className="font-display text-xs font-semibold text-white text-center px-2">{item.caption}</p>
+                <div key={`${activePhase}-grid-${i}`} className="relative w-full">
+                  <div
+                    className="mx-auto"
+                    style={{
+                      width: gridWidth,
+                      display: "grid",
+                      gridTemplateColumns: `repeat(${grid.columns}, 1fr)`,
+                      gap: "8px",
+                    }}
+                  >
+                    {grid.items.map((item, j) => {
+                      const myIdx = gridStartIdx + j;
+                      return (
+                        <div
+                          key={j}
+                          className="relative group cursor-zoom-in overflow-hidden"
+                          style={{ aspectRatio: "1/2" }}
+                          data-flat-index={myIdx}
+                          onClick={() => handleOpen(myIdx)}
+                        >
+                          <img src={item.src} alt={item.caption} className="absolute inset-0 w-full h-full object-contain block" loading="lazy" />
+                          <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center pointer-events-none">
+                            <p className="font-display text-xs font-semibold text-white text-center px-2">{item.caption}</p>
+                          </div>
                         </div>
-                      </div>
-                    );
-                  })}
+                      );
+                    })}
+                  </div>
+                  {grid.text && (
+                    <div
+                      className="absolute top-0"
+                      style={{
+                        left: refImageWidth ? `calc(50% + ${refImageWidth / 2}px + 16px)` : "calc(50% + (100vh - 168px) * 8.5 / 22 + 16px)",
+                        width: refImageWidth ? `calc(50% - ${refImageWidth / 2}px - 32px)` : "180px",
+                      }}
+                    >
+                      <p className="font-body text-[12px] leading-relaxed text-muted-foreground">{grid.text}</p>
+                    </div>
+                  )}
                 </div>
               );
             }

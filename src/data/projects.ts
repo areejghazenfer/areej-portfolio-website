@@ -103,6 +103,7 @@ export interface ProjectImageGrid {
   type: "grid";
   columns: number;
   items: { src: string; caption: string }[];
+  text?: string;
 }
 
 export type ProjectImageEntry = string | ProjectImage | ProjectImageGroup | ProjectImagePortraitPair | ProjectImageGrid;
@@ -201,6 +202,7 @@ export const projects: Project[] = [
           {
             type: "grid",
             columns: 5,
+            text: "This study examines how format shapes the perception of space through the creation of miniature environments. By extending beyond the scale of the human eye, the work reveals how multiple versions of a space can exist and be understood at once. Each abstract form remains open to interpretation, allowing perception and experience to influence how the space is read and engaged.",
             items: [
               { src: p2_set1,  caption: "Apartment Iteration 1" },
               { src: p2_set2,  caption: "Apartment Iteration 2" },
