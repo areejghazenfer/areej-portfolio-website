@@ -518,7 +518,6 @@ const ProjectDetail = () => {
                     display: "grid",
                     gridTemplateColumns: `repeat(${grid.columns}, 1fr)`,
                     gap: "8px",
-                    alignItems: "start",
                   }}
                 >
                   {grid.items.map((item, j) => {
@@ -526,11 +525,12 @@ const ProjectDetail = () => {
                     return (
                       <div
                         key={j}
-                        className="relative group cursor-zoom-in"
+                        className="relative group cursor-zoom-in overflow-hidden"
+                        style={{ aspectRatio: "1/2" }}
                         data-flat-index={myIdx}
                         onClick={() => handleOpen(myIdx)}
                       >
-                        <img src={item.src} alt={item.caption} className="w-full h-auto block" loading="lazy" />
+                        <img src={item.src} alt={item.caption} className="absolute inset-0 w-full h-full object-contain block" loading="lazy" />
                         <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center pointer-events-none">
                           <p className="font-display text-xs font-semibold text-white text-center px-2">{item.caption}</p>
                         </div>
