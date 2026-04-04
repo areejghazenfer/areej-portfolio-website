@@ -50,6 +50,7 @@ const ProjectDetail = () => {
   const carouselRowRef = useRef<HTMLDivElement>(null);
   const bookSketchRef = useRef<HTMLDivElement>(null);
   const [bookSketchOffsetTop, setBookSketchOffsetTop] = useState(0);
+  const groupContainerRef = useRef<HTMLDivElement>(null);
   const [carousel2Page, setCarousel2Page] = useState(0);
   const [carousel2LightboxIndex, setCarousel2LightboxIndex] = useState<number | null>(null);
 
@@ -59,22 +60,24 @@ const ProjectDetail = () => {
   // Measure book sketch's offsetTop relative to its group container
   useLayoutEffect(() => {
     const el = bookSketchRef.current;
-    if (!el) return;
+    const container = groupContainerRef.current;
+    if (!el || !container) return;
     const measure = () => setBookSketchOffsetTop(el.offsetTop);
     measure();
     const obs = new ResizeObserver(measure);
-    obs.observe(document.body);
+    obs.observe(container);
     return () => obs.disconnect();
   }, [activePhase, id, refImageWidth]);
 
   // Measure carousel row's offsetTop relative to its group container
   useLayoutEffect(() => {
     const el = carouselRowRef.current;
-    if (!el) return;
+    const container = groupContainerRef.current;
+    if (!el || !container) return;
     const measure = () => setCarouselOffsetTop(el.offsetTop);
     measure();
     const obs = new ResizeObserver(measure);
-    obs.observe(document.body);
+    obs.observe(container);
     return () => obs.disconnect();
   }, [activePhase, id, refImageWidth]);
 
@@ -329,16 +332,15 @@ const ProjectDetail = () => {
               const groupStartIdx = flatIdx;
               flatIdx += group.items.length;
               return (
-              <div key={`${activePhase}-group-${i}`} className="relative w-full flex flex-col gap-0">
-                {/* Second carousel — books images, 4 per page — at top */}
+              <div key={`${activePhase}-group-${i}`} ref={groupContainerRef} className="relative w-full flex flex-col gap-0">
+                {/* Second carousel — books images, 6 per page — full width */}
                 {group.carousel2 && group.carousel2.length > 0 && (() => {
-                  const perPage2 = 4;
+                  const perPage2 = 6;
                   const totalPages2 = Math.ceil(group.carousel2.length / perPage2);
                   const pageItems2 = group.carousel2.slice(carousel2Page * perPage2, (carousel2Page + 1) * perPage2);
-                  const carouselWidth2 = refImageWidth ? `${refImageWidth}px` : "calc((100vh - 168px) * 8.5 / 11)";
                   return (
                     <React.Fragment>
-                    <div className="mx-auto mb-8 flex items-center gap-3" style={{ width: carouselWidth2 }}>
+                    <div className="w-full mb-8 flex items-center gap-3">
                       <button
                         onClick={() => setCarousel2Page(p => Math.max(0, p - 1))}
                         disabled={carousel2Page === 0}
@@ -369,9 +371,10 @@ const ProjectDetail = () => {
                         <ChevronRight size={20} />
                       </button>
                     </div>
-                    <p className="mx-auto mb-4 font-body text-[10px] tracking-ultra-wide text-muted-foreground/60 text-center" style={{ width: carouselWidth2 }}>
+                    <p className="w-full mb-4 font-body text-[10px] tracking-ultra-wide text-muted-foreground/60 text-center">
                       {carousel2Page * perPage2 + 1}–{Math.min((carousel2Page + 1) * perPage2, group.carousel2!.length)} / {group.carousel2!.length}
                     </p>
+                    <div className="w-full mb-8 h-px" style={{ background: "hsl(var(--primary) / 0.4)" }} />
                     </React.Fragment>
                   );
                 })()}
