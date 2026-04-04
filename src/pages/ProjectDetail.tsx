@@ -601,7 +601,7 @@ const ProjectDetail = () => {
               onClick={() => goTo(projects[currentIndex - 1].id)}
               className="font-body text-[11px] tracking-ultra-wide uppercase text-muted-foreground hover:text-primary transition-colors underline underline-offset-4"
             >
-              ← {projects[currentIndex - 1].title}
+              ← Previous Project: {projects[currentIndex - 1].title}
             </button>
           ) : <div />}
 
