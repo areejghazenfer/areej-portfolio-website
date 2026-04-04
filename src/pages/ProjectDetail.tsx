@@ -1,7 +1,7 @@
 import { useParams, Link, useNavigate } from "react-router-dom";
 import React, { useEffect, useLayoutEffect, useRef, useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, Instagram, Linkedin, X, ChevronLeft, ChevronRight } from "lucide-react";
+import { ArrowLeft, X, ChevronLeft, ChevronRight } from "lucide-react";
 import { projects, ProjectImage, ProjectImageGroup, ProjectImagePortraitPair, ProjectImageEntry, ProjectDetail, ProjectPhase } from "@/data/projects";
 
 const resolveImage = (img: string | ProjectImage) =>
@@ -594,62 +594,26 @@ const ProjectDetail = () => {
       {/* ── Next Project Bar — full width ── */}
       {nextProject && (
         <div
-          className="flex items-end justify-between gap-6 w-full flex-shrink-0"
-          style={{ paddingTop: "50px", paddingBottom: "50px", borderTop: "1px solid hsl(var(--border) / 0.2)" }}
+          className="flex items-center justify-between gap-6 w-full flex-shrink-0"
+          style={{ paddingTop: "50px", paddingBottom: "50px", paddingLeft: "50px", paddingRight: "50px", borderTop: "1px solid hsl(var(--border) / 0.2)" }}
         >
-          {/* Prev project + social icons — left side */}
-          <div className="flex items-end gap-6" style={{ paddingLeft: "50px" }}>
-            {currentIndex > 0 ? (
-              <div className="flex items-end gap-4">
-                <img
-                  src={projects[currentIndex - 1].image}
-                  alt={projects[currentIndex - 1].title}
-                  onClick={() => goTo(projects[currentIndex - 1].id)}
-                  className="object-cover flex-shrink-0 cursor-pointer"
-                  style={{ width: "220px", height: "150px" }}
-                />
-                <button
-                  onClick={() => goTo(projects[currentIndex - 1].id)}
-                  className="font-body text-[11px] tracking-ultra-wide uppercase text-muted-foreground hover:text-primary transition-colors underline underline-offset-4"
-                >
-                  ← {projects[currentIndex - 1].title}
-                </button>
-              </div>
-            ) : <div />}
-            <a
-              href="https://www.instagram.com/areej.instudio/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-muted-foreground hover:text-primary transition-colors"
-            >
-              <Instagram size={16} />
-            </a>
-            <a
-              href="https://www.linkedin.com/in/areej-ghazenfer/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-muted-foreground hover:text-primary transition-colors"
-            >
-              <Linkedin size={16} />
-            </a>
-          </div>
-
-          {/* Next project — right side */}
-          <div className="flex items-end gap-6">
+          {/* Prev project — left side */}
+          {currentIndex > 0 ? (
             <button
-              onClick={() => goTo(nextProject.id)}
+              onClick={() => goTo(projects[currentIndex - 1].id)}
               className="font-body text-[11px] tracking-ultra-wide uppercase text-muted-foreground hover:text-primary transition-colors underline underline-offset-4"
             >
-              Next Project: {nextProject.title} →
+              ← {projects[currentIndex - 1].title}
             </button>
-            <img
-              src={nextProject.image}
-              alt={nextProject.title}
-              onClick={() => goTo(nextProject.id)}
-              className="object-cover flex-shrink-0 cursor-pointer"
-              style={{ width: "220px", height: "150px", marginRight: "50px" }}
-            />
-          </div>
+          ) : <div />}
+
+          {/* Next project — right side */}
+          <button
+            onClick={() => goTo(nextProject.id)}
+            className="font-body text-[11px] tracking-ultra-wide uppercase text-muted-foreground hover:text-primary transition-colors underline underline-offset-4"
+          >
+            Next Project: {nextProject.title} →
+          </button>
         </div>
       )}
 
