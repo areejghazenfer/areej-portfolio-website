@@ -518,6 +518,7 @@ const ProjectDetail = () => {
                     display: "grid",
                     gridTemplateColumns: `repeat(${grid.columns}, 1fr)`,
                     gap: "8px",
+                    alignItems: "start",
                   }}
                 >
                   {grid.items.map((item, j) => {
@@ -525,7 +526,7 @@ const ProjectDetail = () => {
                     return (
                       <div
                         key={j}
-                        className="relative group cursor-zoom-in overflow-hidden"
+                        className="relative group cursor-zoom-in"
                         data-flat-index={myIdx}
                         onClick={() => handleOpen(myIdx)}
                       >
