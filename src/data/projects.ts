@@ -1,11 +1,11 @@
 const _booksModules = import.meta.glob<{ default: string }>(
-  "../assets/project2-images/BOOKS/*.jpg",
+  "../assets/project2-images/BOOKS/*.{jpg,png}",
   { eager: true }
 );
 const booksImages: string[] = Object.entries(_booksModules)
   .sort(([a], [b]) => {
-    const numA = parseInt(a.match(/P(\d+)/)?.[1] ?? "0");
-    const numB = parseInt(b.match(/P(\d+)/)?.[1] ?? "0");
+    const numA = parseInt(a.match(/[/\\]P?(\d+)\.[a-z]+$/i)?.[1] ?? "0");
+    const numB = parseInt(b.match(/[/\\]P?(\d+)\.[a-z]+$/i)?.[1] ?? "0");
     return numA - numB;
   })
   .map(([, m]) => m.default);
