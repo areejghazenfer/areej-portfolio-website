@@ -50,6 +50,7 @@ import p2_sc006 from "@/assets/project2-images/SECTION CUT POTETICS OF SPACE/img
 import p2_q1 from "@/assets/project2-images/Minds_Eye_Page_3_Q1.jpg";
 import p2_q4 from "@/assets/project2-images/Minds_Eye_Page_3_Q4.jpg";
 import p2_zoomedInstallation from "@/assets/project2-images/zoomed in installation.jpg";
+import p2_geometry from "@/assets/project2-images/Geometry.png";
 
 // Project 2 — Phase 2 Model images
 import p2_model0 from "@/assets/project2-images/Models/0 (1).jpg";
@@ -166,7 +167,7 @@ export const projects: Project[] = [
     ],
     phases: [
       {
-        label: "Phase 1",
+        label: "The Miniature",
         images: [
           {
             type: "group",
@@ -186,8 +187,16 @@ export const projects: Project[] = [
         ],
       },
       {
-        label: "Phase 2",
+        label: "The Macro",
         images: [
+          {
+            type: "grid",
+            columns: 1,
+            text: "This study examines how format shapes the perception of space through the creation of miniature environments. By extending beyond the scale of the human eye, the work reveals how multiple versions of a space can exist and be understood at once. Each abstract form remains open to interpretation, allowing perception and experience to influence how the space is read and engaged.",
+            items: [
+              { src: p2_geometry, caption: "" },
+            ],
+          },
           { src: p2_model0 },
           { src: p2_model1 },
           { src: p2_model2 },
