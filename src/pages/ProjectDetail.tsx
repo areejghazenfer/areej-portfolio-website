@@ -2,7 +2,7 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import React, { useEffect, useLayoutEffect, useRef, useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, X, ChevronLeft, ChevronRight } from "lucide-react";
-import { projects, ProjectImage, ProjectImageGroup, ProjectImagePortraitPair, ProjectImageEntry, ProjectDetail, ProjectPhase } from "@/data/projects";
+import { projects, ProjectImage, ProjectImageGroup, ProjectImagePortraitPair, ProjectImageGrid, ProjectImageEntry, ProjectDetail, ProjectPhase } from "@/data/projects";
 
 const resolveImage = (img: string | ProjectImage) =>
   typeof img === "string" ? { src: img } : img;
@@ -104,6 +104,9 @@ const ProjectDetail = () => {
   const allImages: string[] = displayImages.flatMap((img) => {
     if (typeof img === "object" && "type" in img && img.type === "group") {
       return (img as ProjectImageGroup).items.map((it) => it.src);
+    }
+    if (typeof img === "object" && "type" in img && img.type === "grid") {
+      return (img as ProjectImageGrid).items.map((it) => it.src);
     }
     if (typeof img === "object" && "type" in img && img.type === "portraitPair") {
       const pp = img as ProjectImagePortraitPair;
@@ -500,6 +503,43 @@ const ProjectDetail = () => {
               );
             }
 
+            // ── Image Grid ──
+            if (typeof img === "object" && "type" in img && img.type === "grid") {
+              const grid = img as ProjectImageGrid;
+              const gridStartIdx = flatIdx;
+              flatIdx += grid.items.length;
+              const gridWidth = refImageWidth ? `${refImageWidth}px` : "calc((100vh - 168px) * 8.5 / 11)";
+              return (
+                <div
+                  key={`${activePhase}-grid-${i}`}
+                  className="mx-auto"
+                  style={{
+                    width: gridWidth,
+                    display: "grid",
+                    gridTemplateColumns: `repeat(${grid.columns}, 1fr)`,
+                    gap: "8px",
+                  }}
+                >
+                  {grid.items.map((item, j) => {
+                    const myIdx = gridStartIdx + j;
+                    return (
+                      <div
+                        key={j}
+                        className="relative group cursor-zoom-in overflow-hidden"
+                        data-flat-index={myIdx}
+                        onClick={() => handleOpen(myIdx)}
+                      >
+                        <img src={item.src} alt={item.caption} className="w-full h-auto block" loading="lazy" />
+                        <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center pointer-events-none">
+                          <p className="font-display text-xs font-semibold text-white text-center px-2">{item.caption}</p>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              );
+            }
+
             // ── Portrait Pair ──
             if (typeof img === "object" && "type" in img && img.type === "portraitPair") {
               const pp = img as ProjectImagePortraitPair;
@@ -543,7 +583,7 @@ const ProjectDetail = () => {
 
             // Attach ref to first non-group image for width measurement (skip portraitPair)
             const isFirstRegular = !refImageWidth && i === displayImages.findIndex(im => {
-              if (typeof im === "object" && "type" in im && (im.type === "group" || im.type === "portraitPair")) return false;
+              if (typeof im === "object" && "type" in im && (im.type === "group" || im.type === "portraitPair" || im.type === "grid")) return false;
               return true;
             });
 

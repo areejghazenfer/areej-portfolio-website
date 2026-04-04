@@ -54,6 +54,18 @@ import p2_sc006 from "@/assets/project2-images/SECTION CUT POTETICS OF SPACE/img
 import p2_q1 from "@/assets/project2-images/Minds_Eye_Page_3_Q1.jpg";
 import p2_q4 from "@/assets/project2-images/Minds_Eye_Page_3_Q4.jpg";
 import p2_zoomedInstallation from "@/assets/project2-images/zoomed in installation.jpg";
+
+// Project 2 — Phase 2 SET images
+import p2_set1  from "@/assets/project2-images/SET 1.1.png";
+import p2_set2  from "@/assets/project2-images/SET 2.1.png";
+import p2_set3  from "@/assets/project2-images/SET 3.1.png";
+import p2_set4  from "@/assets/project2-images/SET 4.1.png";
+import p2_set6  from "@/assets/project2-images/SET 6.1.png";
+import p2_set7  from "@/assets/project2-images/SET 7.1.png";
+import p2_set8  from "@/assets/project2-images/SET 8.1.png";
+import p2_set9  from "@/assets/project2-images/SET 9.1.png";
+import p2_set10 from "@/assets/project2-images/SET 10.1.png";
+import p2_set11 from "@/assets/project2-images/SET 11.1.png";
 export interface ProjectImage {
   src: string;
   /** If set, this image is displayed side-by-side with a paired image */
@@ -87,7 +99,13 @@ export interface ProjectImagePortraitPair {
   captionRight?: string;
 }
 
-export type ProjectImageEntry = string | ProjectImage | ProjectImageGroup | ProjectImagePortraitPair;
+export interface ProjectImageGrid {
+  type: "grid";
+  columns: number;
+  items: { src: string; caption: string }[];
+}
+
+export type ProjectImageEntry = string | ProjectImage | ProjectImageGroup | ProjectImagePortraitPair | ProjectImageGrid;
 
 export interface ProjectDetail {
   label: string;
@@ -180,6 +198,22 @@ export const projects: Project[] = [
       {
         label: "Phase 2",
         images: [
+          {
+            type: "grid",
+            columns: 5,
+            items: [
+              { src: p2_set1,  caption: "Apartment Iteration 1" },
+              { src: p2_set2,  caption: "Apartment Iteration 2" },
+              { src: p2_set3,  caption: "Apartment Iteration 3" },
+              { src: p2_set4,  caption: "Apartment Iteration 4" },
+              { src: p2_set6,  caption: "Apartment Iteration 5" },
+              { src: p2_set7,  caption: "Apartment Iteration 6" },
+              { src: p2_set8,  caption: "Apartment Iteration 7" },
+              { src: p2_set9,  caption: "Apartment Iteration 8" },
+              { src: p2_set10, caption: "Apartment Iteration 9" },
+              { src: p2_set11, caption: "Apartment Iteration 10" },
+            ],
+          },
           { src: p2_4L, pair: p2_4R },
           { src: p2_5L, pair: p2_5R },
         ],
