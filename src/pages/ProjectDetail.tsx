@@ -302,12 +302,12 @@ const ProjectDetail = () => {
           />
         )}
 
-        {/* Program list — absolutely positioned top-right of content column */}
+        {/* Program list — absolutely positioned bottom-right, bottom aligned with full spread */}
         {project.programList && (
           <div
             className="absolute flex flex-col gap-0"
             style={{
-              top: "48px",
+              bottom: "50px",
               left: refImageWidth ? `calc(50% + ${refImageWidth / 2}px + 16px)` : "calc(50% + (100vh - 168px) * 8.5 / 22 + 16px)",
               width: refImageWidth ? `calc(50% - ${refImageWidth / 2}px - 32px)` : "180px",
             }}
