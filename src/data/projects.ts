@@ -52,6 +52,14 @@ import p2_q4 from "@/assets/project2-images/Minds_Eye_Page_3_Q4.jpg";
 import p2_zoomedInstallation from "@/assets/project2-images/zoomed in installation.jpg";
 import p2_geometry from "@/assets/project2-images/Geometry.png";
 
+// Project 3 — Mirrored Days
+import p3_adultForts    from "@/assets/project3-images/ADULT FORTS.png";
+import p3_adultTreeHouse from "@/assets/project3-images/ADULT TREE HOUSE.png";
+import p3_jungleGym     from "@/assets/project3-images/JUNGLE GYM.png";
+import p3_playground    from "@/assets/project3-images/PLAYGROUND KIDS.png";
+import p3_kidsHouses    from "@/assets/project3-images/KIDS HOUSES.png";
+import p3_slide         from "@/assets/project3-images/SLIDE.png";
+
 // Project 2 — Phase 2 Model images
 import p2_model0 from "@/assets/project2-images/Models/0 (1).jpg";
 import p2_model1 from "@/assets/project2-images/Models/1 (1).jpg";
@@ -251,11 +259,18 @@ export const projects: Project[] = [
     title: "Marina Loft",
     location: "Dubai, UAE",
     category: "interiors",
-    image: project3,
-    images: [project3, project1, project6],
+    image: p3_adultForts,
+    images: [
+      { src: p3_adultTreeHouse, conceptWidth: true },
+      { src: p3_jungleGym,      conceptWidth: true },
+      { src: p3_playground,     conceptWidth: true },
+      { src: p3_kidsHouses,     conceptWidth: true },
+      { type: "portraitPair", left: p3_adultForts, right: p3_slide },
+    ],
     description:
       "An open-plan loft that celebrates the intersection of dining and living. Terracotta accents and natural wood bring grounding warmth to the waterfront space.",
     year: "2023",
+    referenceImageSrc: p3_jungleGym,
   },
   {
     id: "earth-vessels",
