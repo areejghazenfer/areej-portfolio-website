@@ -58,7 +58,8 @@ import p3_adultTreeHouse from "@/assets/project3-images/ADULT TREE HOUSE.png";
 import p3_jungleGym     from "@/assets/project3-images/JUNGLE GYM.png";
 import p3_playground    from "@/assets/project3-images/PLAYGROUND KIDS.png";
 import p3_kidsHouses    from "@/assets/project3-images/KIDS HOUSES.png";
-import p3_slide         from "@/assets/project3-images/SLIDE.png";
+import p3_slide              from "@/assets/project3-images/SLIDE.png";
+import p3_mirroredDaysFull   from "@/assets/project3-images/Mirrored_Days_Page_3_Full.jpg";
 
 // Project 2 — Phase 2 Model images
 import p2_model0 from "@/assets/project2-images/Models/0 (1).jpg";
@@ -118,7 +119,19 @@ export interface ProjectImageSideGroup {
   rightImage: { src: string; caption?: string };
 }
 
-export type ProjectImageEntry = string | ProjectImage | ProjectImageGroup | ProjectImagePortraitPair | ProjectImageGrid | ProjectImageSideGroup;
+export interface ProjectProgramItem {
+  number: string;
+  name: string;
+}
+
+export interface ProjectImageWithProgram {
+  type: "imageWithProgram";
+  src: string;
+  programTitle: string;
+  programGroups: ProjectProgramItem[][];
+}
+
+export type ProjectImageEntry = string | ProjectImage | ProjectImageGroup | ProjectImagePortraitPair | ProjectImageGrid | ProjectImageSideGroup | ProjectImageWithProgram;
 
 export interface ProjectDetail {
   label: string;
@@ -255,6 +268,46 @@ export const projects: Project[] = [
       { src: p3_playground,     conceptWidth: true, caption: "#29 Children's Indoor Playground" },
       { src: p3_kidsHouses,     conceptWidth: true, caption: "#27 Children Activity Space" },
       { type: "portraitPair", left: p3_adultForts, right: p3_slide, captionLeft: "#19-21 Adult Fort Offices", captionRight: "#17 Puzzle Poof Seating" },
+      {
+        type: "imageWithProgram",
+        src: p3_mirroredDaysFull,
+        programTitle: "Program:",
+        programGroups: [
+          [
+            { number: "01", name: "0-16 Months" },
+            { number: "02", name: "16-30 Months" },
+            { number: "03", name: "Family Restroom" },
+            { number: "04", name: "Staff Lounge" },
+            { number: "05", name: "Women's Restroom" },
+            { number: "06", name: "Men's Restroom" },
+            { number: "07", name: "Storage" },
+            { number: "08", name: "Nursing" },
+          ],
+          [
+            { number: "09", name: "Small Conference Rooms" },
+            { number: "10", name: "Reception" },
+          ],
+          [
+            { number: "11", name: "Cafeteria" },
+            { number: "12", name: "Buzzi Jungle Swings" },
+            { number: "13", name: "Janitor's Closet" },
+            { number: "14", name: "Puzzle Poof Seating" },
+            { number: "15", name: "Tree House" },
+            { number: "16", name: "Fort Offices" },
+            { number: "17", name: "Lounge" },
+            { number: "18", name: "Meditation / Reflection Space" },
+            { number: "19", name: "Quiet Space" },
+          ],
+          [
+            { number: "21", name: "Large Conference Rooms" },
+            { number: "22", name: "Kid's Restroom" },
+            { number: "23", name: "Activity Space" },
+            { number: "24", name: "Reading Space" },
+            { number: "25", name: "Indoor Playground" },
+            { number: "26", name: "Children's Dining" },
+          ],
+        ],
+      },
     ],
     description:
       "An open-plan loft that celebrates the intersection of dining and living. Terracotta accents and natural wood bring grounding warmth to the waterfront space.",
