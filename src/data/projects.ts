@@ -210,9 +210,9 @@ export const projects: Project[] = [
               { src: p2_geometry, caption: "" },
             ],
           },
-          { src: p2_model0 },
-          { src: p2_model1 },
-          { src: p2_model2 },
+          { src: p2_model0, conceptWidth: true },
+          { src: p2_model1, conceptWidth: true },
+          { src: p2_model2, conceptWidth: true },
           {
             type: "sideGroup",
             leftImages: [
