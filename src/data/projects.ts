@@ -244,17 +244,6 @@ export const projects: Project[] = [
     referenceImageSrc: p1_2L,
   },
   {
-    id: "cedar-villa",
-    title: "Cedar Villa",
-    location: "Beirut, Lebanon",
-    category: "interiors",
-    image: project2,
-    images: [project2, project4, project5],
-    description:
-      "Reimagining a heritage villa with a refined material palette. Soft textures and warm lighting honor the building's history while introducing contemporary comfort.",
-    year: "2024",
-  },
-  {
     id: "marina-loft",
     title: "Marina Loft",
     location: "Dubai, UAE",
