@@ -2,7 +2,7 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import React, { useEffect, useLayoutEffect, useRef, useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, X, ChevronLeft, ChevronRight } from "lucide-react";
-import { projects, ProjectImage, ProjectImageGroup, ProjectImagePortraitPair, ProjectImageGrid, ProjectImageSideGroup, ProjectImageWithProgram, ProjectImageEntry, ProjectDetail, ProjectPhase } from "@/data/projects";
+import { projects, ProjectImage, ProjectImageGroup, ProjectImagePortraitPair, ProjectImageGrid, ProjectImageSideGroup, ProjectImageEntry, ProjectDetail, ProjectPhase } from "@/data/projects";
 
 const resolveImage = (img: string | ProjectImage) =>
   typeof img === "string" ? { src: img } : img;
@@ -111,9 +111,6 @@ const ProjectDetail = () => {
     if (typeof img === "object" && "type" in img && img.type === "sideGroup") {
       const sg = img as ProjectImageSideGroup;
       return [...sg.leftImages.map(i => i.src), sg.rightImage.src];
-    }
-    if (typeof img === "object" && "type" in img && img.type === "imageWithProgram") {
-      return [(img as ProjectImageWithProgram).src];
     }
     if (typeof img === "object" && "type" in img && img.type === "portraitPair") {
       const pp = img as ProjectImagePortraitPair;
@@ -293,7 +290,7 @@ const ProjectDetail = () => {
       </div>
 
       {/* ── Right column: 75% — scrolls naturally with main ── */}
-      <div className="flex-1 md:w-3/4 flex flex-col gap-4 px-4 pt-[48px] pb-[50px]">
+      <div className="relative flex-1 md:w-3/4 flex flex-col gap-4 px-4 pt-[48px] pb-[50px]">
 
         {/* Hidden reference image — measures rendered width for page sizing */}
         {project.referenceImageSrc && (
@@ -303,6 +300,31 @@ const ProjectDetail = () => {
             aria-hidden="true"
             className="h-[calc(100vh-168px)] w-auto opacity-0 absolute pointer-events-none"
           />
+        )}
+
+        {/* Program list — absolutely positioned top-right of content column */}
+        {project.programList && (
+          <div
+            className="absolute flex flex-col gap-0"
+            style={{
+              top: "48px",
+              left: refImageWidth ? `calc(50% + ${refImageWidth / 2}px + 16px)` : "calc(50% + (100vh - 168px) * 8.5 / 22 + 16px)",
+              width: refImageWidth ? `calc(50% - ${refImageWidth / 2}px - 32px)` : "180px",
+            }}
+          >
+            <p className="font-body text-[10px] tracking-ultra-wide uppercase text-primary mb-4">{project.programList.title}</p>
+            {project.programList.groups.map((group, gi) => (
+              <React.Fragment key={gi}>
+                {gi > 0 && <div className="h-px my-2" style={{ background: "hsl(var(--primary) / 0.25)" }} />}
+                {group.map((item) => (
+                  <div key={item.number} className="flex justify-between gap-2 mb-[2px]">
+                    <span className="font-body text-[11px] text-muted-foreground tabular-nums">{item.number}</span>
+                    <span className="font-body text-[11px] text-muted-foreground text-right">{item.name}</span>
+                  </div>
+                ))}
+              </React.Fragment>
+            ))}
+          </div>
         )}
 
         {/* Phase tabs — only shown if project has phases */}
@@ -571,45 +593,6 @@ const ProjectDetail = () => {
               );
             }
 
-            // ── Image with Program list ──
-            if (typeof img === "object" && "type" in img && img.type === "imageWithProgram") {
-              const iwp = img as ProjectImageWithProgram;
-              const myIdx = flatIdx++;
-              const w = refImageWidth ? `${refImageWidth}px` : "calc((100vh - 168px) * 8.5 / 11)";
-              return (
-                <div key={`${activePhase}-iwp-${i}`} className="relative w-full">
-                  <div
-                    className="mx-auto cursor-zoom-in"
-                    style={{ width: w }}
-                    data-flat-index={myIdx}
-                    onClick={() => handleOpen(myIdx)}
-                  >
-                    <img src={iwp.src} alt="" className="w-full h-auto block" loading="lazy" />
-                  </div>
-                  <div
-                    className="absolute top-0 flex flex-col gap-0"
-                    style={{
-                      left: refImageWidth ? `calc(50% + ${refImageWidth / 2}px + 16px)` : "calc(50% + (100vh - 168px) * 8.5 / 22 + 16px)",
-                      width: refImageWidth ? `calc(50% - ${refImageWidth / 2}px - 32px)` : "180px",
-                    }}
-                  >
-                    <p className="font-body text-[10px] tracking-ultra-wide uppercase text-primary mb-4">{iwp.programTitle}</p>
-                    {iwp.programGroups.map((group, gi) => (
-                      <React.Fragment key={gi}>
-                        {gi > 0 && <div className="h-px my-2" style={{ background: "hsl(var(--primary) / 0.25)" }} />}
-                        {group.map((item) => (
-                          <div key={item.number} className="flex justify-between gap-2 mb-[2px]">
-                            <span className="font-body text-[11px] text-muted-foreground tabular-nums">{item.number}</span>
-                            <span className="font-body text-[11px] text-muted-foreground text-right">{item.name}</span>
-                          </div>
-                        ))}
-                      </React.Fragment>
-                    ))}
-                  </div>
-                </div>
-              );
-            }
-
             // ── Side Group (stacked left images + tall right image) ──
             if (typeof img === "object" && "type" in img && img.type === "sideGroup") {
               const sg = img as ProjectImageSideGroup;
@@ -703,7 +686,7 @@ const ProjectDetail = () => {
 
             // Attach ref to first non-group image for width measurement (skip portraitPair)
             const isFirstRegular = !refImageWidth && i === displayImages.findIndex(im => {
-              if (typeof im === "object" && "type" in im && (im.type === "group" || im.type === "portraitPair" || im.type === "grid" || im.type === "sideGroup" || im.type === "imageWithProgram")) return false;
+              if (typeof im === "object" && "type" in im && (im.type === "group" || im.type === "portraitPair" || im.type === "grid" || im.type === "sideGroup")) return false;
               return true;
             });
 

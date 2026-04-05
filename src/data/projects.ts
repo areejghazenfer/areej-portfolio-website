@@ -157,6 +157,8 @@ export interface Project {
   body?: string;
   /** Hidden reference image whose rendered width sets the page-width for this project */
   referenceImageSrc?: string;
+  /** Program list rendered at the top of the right column */
+  programList?: { title: string; groups: ProjectProgramItem[][] };
 }
 
 export const projects: Project[] = [
@@ -268,51 +270,50 @@ export const projects: Project[] = [
       { src: p3_playground,     conceptWidth: true, caption: "#29 Children's Indoor Playground" },
       { src: p3_kidsHouses,     conceptWidth: true, caption: "#27 Children Activity Space" },
       { type: "portraitPair", left: p3_adultForts, right: p3_slide, captionLeft: "#19-21 Adult Fort Offices", captionRight: "#17 Puzzle Poof Seating" },
-      {
-        type: "imageWithProgram",
-        src: p3_mirroredDaysFull,
-        programTitle: "Program:",
-        programGroups: [
-          [
-            { number: "01", name: "0-16 Months" },
-            { number: "02", name: "16-30 Months" },
-            { number: "03", name: "Family Restroom" },
-            { number: "04", name: "Staff Lounge" },
-            { number: "05", name: "Women's Restroom" },
-            { number: "06", name: "Men's Restroom" },
-            { number: "07", name: "Storage" },
-            { number: "08", name: "Nursing" },
-          ],
-          [
-            { number: "09", name: "Small Conference Rooms" },
-            { number: "10", name: "Reception" },
-          ],
-          [
-            { number: "11", name: "Cafeteria" },
-            { number: "12", name: "Buzzi Jungle Swings" },
-            { number: "13", name: "Janitor's Closet" },
-            { number: "14", name: "Puzzle Poof Seating" },
-            { number: "15", name: "Tree House" },
-            { number: "16", name: "Fort Offices" },
-            { number: "17", name: "Lounge" },
-            { number: "18", name: "Meditation / Reflection Space" },
-            { number: "19", name: "Quiet Space" },
-          ],
-          [
-            { number: "21", name: "Large Conference Rooms" },
-            { number: "22", name: "Kid's Restroom" },
-            { number: "23", name: "Activity Space" },
-            { number: "24", name: "Reading Space" },
-            { number: "25", name: "Indoor Playground" },
-            { number: "26", name: "Children's Dining" },
-          ],
-        ],
-      },
+      { src: p3_mirroredDaysFull, fullSpread: true },
     ],
     description:
       "An open-plan loft that celebrates the intersection of dining and living. Terracotta accents and natural wood bring grounding warmth to the waterfront space.",
     year: "2023",
     referenceImageSrc: p3_jungleGym,
+    programList: {
+      title: "Program:",
+      groups: [
+        [
+          { number: "01", name: "0-16 Months" },
+          { number: "02", name: "16-30 Months" },
+          { number: "03", name: "Family Restroom" },
+          { number: "04", name: "Staff Lounge" },
+          { number: "05", name: "Women's Restroom" },
+          { number: "06", name: "Men's Restroom" },
+          { number: "07", name: "Storage" },
+          { number: "08", name: "Nursing" },
+        ],
+        [
+          { number: "09", name: "Small Conference Rooms" },
+          { number: "10", name: "Reception" },
+        ],
+        [
+          { number: "11", name: "Cafeteria" },
+          { number: "12", name: "Buzzi Jungle Swings" },
+          { number: "13", name: "Janitor's Closet" },
+          { number: "14", name: "Puzzle Poof Seating" },
+          { number: "15", name: "Tree House" },
+          { number: "16", name: "Fort Offices" },
+          { number: "17", name: "Lounge" },
+          { number: "18", name: "Meditation / Reflection Space" },
+          { number: "19", name: "Quiet Space" },
+        ],
+        [
+          { number: "21", name: "Large Conference Rooms" },
+          { number: "22", name: "Kid's Restroom" },
+          { number: "23", name: "Activity Space" },
+          { number: "24", name: "Reading Space" },
+          { number: "25", name: "Indoor Playground" },
+          { number: "26", name: "Children's Dining" },
+        ],
+      ],
+    },
   },
   {
     id: "earth-vessels",
