@@ -2,7 +2,7 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import React, { useEffect, useLayoutEffect, useRef, useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, X, ChevronLeft, ChevronRight } from "lucide-react";
-import { projects, ProjectImage, ProjectImageGroup, ProjectImagePortraitPair, ProjectImageGrid, ProjectImageEntry, ProjectDetail, ProjectPhase } from "@/data/projects";
+import { projects, ProjectImage, ProjectImageGroup, ProjectImagePortraitPair, ProjectImageGrid, ProjectImageSideGroup, ProjectImageEntry, ProjectDetail, ProjectPhase } from "@/data/projects";
 
 const resolveImage = (img: string | ProjectImage) =>
   typeof img === "string" ? { src: img } : img;
@@ -107,6 +107,10 @@ const ProjectDetail = () => {
     }
     if (typeof img === "object" && "type" in img && img.type === "grid") {
       return (img as ProjectImageGrid).items.map((it) => it.src);
+    }
+    if (typeof img === "object" && "type" in img && img.type === "sideGroup") {
+      const sg = img as ProjectImageSideGroup;
+      return [...sg.leftImages.map(i => i.src), sg.rightImage.src];
     }
     if (typeof img === "object" && "type" in img && img.type === "portraitPair") {
       const pp = img as ProjectImagePortraitPair;
@@ -564,6 +568,54 @@ const ProjectDetail = () => {
               );
             }
 
+            // ── Side Group (stacked left images + tall right image) ──
+            if (typeof img === "object" && "type" in img && img.type === "sideGroup") {
+              const sg = img as ProjectImageSideGroup;
+              const sgStartIdx = flatIdx;
+              flatIdx += sg.leftImages.length + 1;
+              const sgWidth = refImageWidth ? `${refImageWidth}px` : "calc((100vh - 168px) * 8.5 / 11)";
+              return (
+                <motion.div
+                  key={`${activePhase}-sg-${i}`}
+                  className="mx-auto"
+                  style={{ width: sgWidth, display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px" }}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: i * 0.05 }}
+                >
+                  {sg.leftImages.map((item, j) => (
+                    <div
+                      key={j}
+                      className="relative group cursor-zoom-in overflow-hidden"
+                      style={{ gridColumn: 1, gridRow: j + 1 }}
+                      data-flat-index={sgStartIdx + j}
+                      onClick={() => handleOpen(sgStartIdx + j)}
+                    >
+                      <img src={item.src} alt={item.caption ?? ""} className="w-full h-auto block" loading="lazy" />
+                      {item.caption && (
+                        <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center pointer-events-none">
+                          <p className="font-display text-sm font-semibold text-white text-center px-4">{item.caption}</p>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                  <div
+                    className="relative group cursor-zoom-in overflow-hidden"
+                    style={{ gridColumn: 2, gridRow: `1 / ${sg.leftImages.length + 1}` }}
+                    data-flat-index={sgStartIdx + sg.leftImages.length}
+                    onClick={() => handleOpen(sgStartIdx + sg.leftImages.length)}
+                  >
+                    <img src={sg.rightImage.src} alt={sg.rightImage.caption ?? ""} className="w-full h-full object-cover block" loading="lazy" />
+                    {sg.rightImage.caption && (
+                      <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center pointer-events-none">
+                        <p className="font-display text-sm font-semibold text-white text-center px-4">{sg.rightImage.caption}</p>
+                      </div>
+                    )}
+                  </div>
+                </motion.div>
+              );
+            }
+
             // ── Portrait Pair ──
             if (typeof img === "object" && "type" in img && img.type === "portraitPair") {
               const pp = img as ProjectImagePortraitPair;
@@ -607,7 +659,7 @@ const ProjectDetail = () => {
 
             // Attach ref to first non-group image for width measurement (skip portraitPair)
             const isFirstRegular = !refImageWidth && i === displayImages.findIndex(im => {
-              if (typeof im === "object" && "type" in im && (im.type === "group" || im.type === "portraitPair" || im.type === "grid")) return false;
+              if (typeof im === "object" && "type" in im && (im.type === "group" || im.type === "portraitPair" || im.type === "grid" || im.type === "sideGroup")) return false;
               return true;
             });
 

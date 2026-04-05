@@ -56,6 +56,12 @@ import p2_geometry from "@/assets/project2-images/Geometry.png";
 import p2_model0 from "@/assets/project2-images/Models/0 (1).jpg";
 import p2_model1 from "@/assets/project2-images/Models/1 (1).jpg";
 import p2_model2 from "@/assets/project2-images/Models/2 (1).jpg";
+
+// Project 2 — Installation images
+import p2_inst3  from "@/assets/project2-images/2023_1212_INSTALLATION_3.png";
+import p2_inst5  from "@/assets/project2-images/2023_1212_INSTALLATION_5.png";
+import p2_inst6  from "@/assets/project2-images/2023_1212_INSTALLATION_6.png";
+import p2_inst12 from "@/assets/project2-images/2023_1212_INSTALLATION_12.png";
 export interface ProjectImage {
   src: string;
   /** If set, this image is displayed side-by-side with a paired image */
@@ -98,7 +104,13 @@ export interface ProjectImageGrid {
   fitHeight?: boolean;
 }
 
-export type ProjectImageEntry = string | ProjectImage | ProjectImageGroup | ProjectImagePortraitPair | ProjectImageGrid;
+export interface ProjectImageSideGroup {
+  type: "sideGroup";
+  leftImages: { src: string; caption?: string }[];
+  rightImage: { src: string; caption?: string };
+}
+
+export type ProjectImageEntry = string | ProjectImage | ProjectImageGroup | ProjectImagePortraitPair | ProjectImageGrid | ProjectImageSideGroup;
 
 export interface ProjectDetail {
   label: string;
@@ -201,6 +213,15 @@ export const projects: Project[] = [
           { src: p2_model0 },
           { src: p2_model1 },
           { src: p2_model2 },
+          {
+            type: "sideGroup",
+            leftImages: [
+              { src: p2_inst3 },
+              { src: p2_inst5 },
+            ],
+            rightImage: { src: p2_inst6 },
+          },
+          { src: p2_inst12 },
         ],
       },
     ],
