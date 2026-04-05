@@ -162,8 +162,6 @@ export const projects: Project[] = [
     image: project2,
     images: [
       { src: p2_3L, pair: p2_3R },
-      { src: p2_4L, pair: p2_4R },
-      { src: p2_5L, pair: p2_5R },
     ],
     phases: [
       {
