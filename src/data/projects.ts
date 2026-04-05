@@ -11,7 +11,7 @@ const booksImages: string[] = Object.entries(_booksModules)
   .map(([, m]) => m.default);
 
 import project1Hero from "@/assets/project1-images/LIVING ROOM UPDATED.png";
-import project1 from "@/assets/project-1.jpg";
+import project1 from "@/assets/project1-images/LIVING ROOM UPDATED.png";
 import project2 from "@/assets/project2-images/PROJECT 2 COVER IMAGE.jpg";
 import project3 from "@/assets/project-3.jpg";
 import project4 from "@/assets/project-4.jpg";
