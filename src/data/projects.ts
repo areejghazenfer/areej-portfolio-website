@@ -275,7 +275,7 @@ export const projects: Project[] = [
     description:
       "An open-plan loft that celebrates the intersection of dining and living. Terracotta accents and natural wood bring grounding warmth to the waterfront space.",
     year: "2023",
-    referenceImageSrc: p3_jungleGym,
+    referenceImageSrc: p1_2L,
     programList: {
       title: "Program:",
       groups: [
