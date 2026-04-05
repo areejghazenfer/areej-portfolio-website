@@ -248,7 +248,7 @@ export const projects: Project[] = [
     title: "Marina Loft",
     location: "Dubai, UAE",
     category: "interiors",
-    image: p3_adultForts,
+    image: p3_jungleGym,
     images: [
       { src: p3_adultTreeHouse, conceptWidth: true, caption: "#18 Adult Tree House" },
       { src: p3_jungleGym,      conceptWidth: true, caption: "#14 Adult Buzzi Jungle Gym" },
