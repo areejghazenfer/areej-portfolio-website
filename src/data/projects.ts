@@ -261,11 +261,11 @@ export const projects: Project[] = [
     category: "interiors",
     image: p3_adultForts,
     images: [
-      { src: p3_adultTreeHouse, conceptWidth: true },
-      { src: p3_jungleGym,      conceptWidth: true },
-      { src: p3_playground,     conceptWidth: true },
-      { src: p3_kidsHouses,     conceptWidth: true },
-      { type: "portraitPair", left: p3_adultForts, right: p3_slide },
+      { src: p3_adultTreeHouse, conceptWidth: true, caption: "#18 Adult Tree House" },
+      { src: p3_jungleGym,      conceptWidth: true, caption: "#14 Adult Buzzi Jungle Gym" },
+      { src: p3_playground,     conceptWidth: true, caption: "#29 Children's Indoor Playground" },
+      { src: p3_kidsHouses,     conceptWidth: true, caption: "#27 Children Activity Space" },
+      { type: "portraitPair", left: p3_adultForts, right: p3_slide, captionLeft: "#19-21 Adult Fort Offices", captionRight: "#17 Puzzle Poof Seating" },
     ],
     description:
       "An open-plan loft that celebrates the intersection of dining and living. Terracotta accents and natural wood bring grounding warmth to the waterfront space.",
