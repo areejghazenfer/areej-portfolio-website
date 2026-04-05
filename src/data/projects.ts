@@ -270,7 +270,7 @@ export const projects: Project[] = [
       { src: p3_playground,     conceptWidth: true, caption: "#29 Children's Indoor Playground" },
       { src: p3_kidsHouses,     conceptWidth: true, caption: "#27 Children Activity Space" },
       { type: "portraitPair", left: p3_adultForts, right: p3_slide, captionLeft: "#19-21 Adult Fort Offices", captionRight: "#17 Puzzle Poof Seating" },
-      { src: p3_mirroredDaysFull, fullSpread: true },
+      { src: p3_mirroredDaysFull, conceptWidth: true },
     ],
     description:
       "An open-plan loft that celebrates the intersection of dining and living. Terracotta accents and natural wood bring grounding warmth to the waterfront space.",
