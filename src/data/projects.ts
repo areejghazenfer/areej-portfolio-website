@@ -221,7 +221,7 @@ export const projects: Project[] = [
             ],
             rightImage: { src: p2_inst6 },
           },
-          { src: p2_inst12 },
+          { src: p2_inst12, conceptWidth: true },
         ],
       },
     ],
