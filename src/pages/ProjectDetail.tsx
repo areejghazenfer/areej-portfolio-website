@@ -578,30 +578,32 @@ const ProjectDetail = () => {
                 <motion.div
                   key={`${activePhase}-sg-${i}`}
                   className="mx-auto"
-                  style={{ width: sgWidth, display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px" }}
+                  style={{ width: sgWidth, display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px", alignItems: "stretch" }}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: i * 0.05 }}
                 >
-                  {sg.leftImages.map((item, j) => (
-                    <div
-                      key={j}
-                      className="relative group cursor-zoom-in overflow-hidden"
-                      style={{ gridColumn: 1, gridRow: j + 1 }}
-                      data-flat-index={sgStartIdx + j}
-                      onClick={() => handleOpen(sgStartIdx + j)}
-                    >
-                      <img src={item.src} alt={item.caption ?? ""} className="w-full h-auto block" loading="lazy" />
-                      {item.caption && (
-                        <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center pointer-events-none">
-                          <p className="font-display text-sm font-semibold text-white text-center px-4">{item.caption}</p>
-                        </div>
-                      )}
-                    </div>
-                  ))}
+                  {/* Left column — flex with space-between so last image aligns to bottom */}
+                  <div className="flex flex-col justify-between gap-2">
+                    {sg.leftImages.map((item, j) => (
+                      <div
+                        key={j}
+                        className="relative group cursor-zoom-in overflow-hidden"
+                        data-flat-index={sgStartIdx + j}
+                        onClick={() => handleOpen(sgStartIdx + j)}
+                      >
+                        <img src={item.src} alt={item.caption ?? ""} className="w-full h-auto block" loading="lazy" />
+                        {item.caption && (
+                          <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center pointer-events-none">
+                            <p className="font-display text-sm font-semibold text-white text-center px-4">{item.caption}</p>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                  {/* Right column — single image stretches to full height of left column */}
                   <div
                     className="relative group cursor-zoom-in overflow-hidden"
-                    style={{ gridColumn: 2, gridRow: `1 / ${sg.leftImages.length + 1}` }}
                     data-flat-index={sgStartIdx + sg.leftImages.length}
                     onClick={() => handleOpen(sgStartIdx + sg.leftImages.length)}
                   >
