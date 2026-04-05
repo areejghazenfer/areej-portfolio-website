@@ -526,11 +526,16 @@ const ProjectDetail = () => {
                         <div
                           key={j}
                           className="relative group cursor-zoom-in overflow-hidden"
-                          style={{ aspectRatio: "1/2" }}
+                          style={grid.cellAspectRatio ? { aspectRatio: grid.cellAspectRatio } : {}}
                           data-flat-index={myIdx}
                           onClick={() => handleOpen(myIdx)}
                         >
-                          <img src={item.src} alt={item.caption} className="absolute inset-0 w-full h-full object-contain block" loading="lazy" />
+                          <img
+                            src={item.src}
+                            alt={item.caption}
+                            className={grid.cellAspectRatio ? "absolute inset-0 w-full h-full object-contain block" : "w-full h-auto block"}
+                            loading="lazy"
+                          />
                           <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center pointer-events-none">
                             <p className="font-display text-xs font-semibold text-white text-center px-2">{item.caption}</p>
                           </div>

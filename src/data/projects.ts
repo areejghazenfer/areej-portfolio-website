@@ -94,6 +94,7 @@ export interface ProjectImageGrid {
   columns: number;
   items: { src: string; caption: string }[];
   text?: string;
+  cellAspectRatio?: string;
 }
 
 export type ProjectImageEntry = string | ProjectImage | ProjectImageGroup | ProjectImagePortraitPair | ProjectImageGrid;
