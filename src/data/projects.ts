@@ -399,6 +399,7 @@ export const projects: Project[] = [
     description: "A study of context, landscape, and community across urban and rural environments.",
     year: "2023",
     details: [
+      { label: "Type", value: "Research" },
       { label: "Year", value: "2023" },
       { label: "Site", value: "The Eastern Shore, VA and Richmond, VA" },
     ],
