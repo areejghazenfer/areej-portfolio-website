@@ -356,6 +356,7 @@ export const projects: Project[] = [
     year: "2024",
     details: [
       { label: "Type", value: "Commercial" },
+      { label: "Featured in", value: "Reconciliation + Celebration" },
       { label: "Year", value: "2023" },
       { label: "Client", value: "The Weyanoke Association" },
       { label: "Site", value: "325 N. Harrison, Richmond VA, 23284" },
@@ -400,9 +401,9 @@ export const projects: Project[] = [
     year: "2023",
     details: [
       { label: "Type", value: "Research" },
+      { label: "Featured in", value: "Art & Music on the Farm" },
       { label: "Year", value: "2023" },
       { label: "Site", value: "The Eastern Shore, VA and Richmond, VA" },
-      { label: "Featured in", value: "Art & Music on the Farm" },
     ],
     body: "Traces of Place investigates how context and landscape shape our understanding of environment and community. Through site analysis of urban and rural conditions, the project studies how historical and ecological layers reveal identity within place. By observing and documenting these traces, it explores how design can emerge from attentive engagement with the land and its stories.",
     images: [
