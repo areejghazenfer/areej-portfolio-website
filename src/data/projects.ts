@@ -228,6 +228,9 @@ export const projects: Project[] = [
     location: "",
     category: "interiors",
     image: project2,
+    details: [
+      { label: "Featured in", value: "Qualia, The Anderson Gallery" },
+    ],
     images: [
       { src: p2_3L, pair: p2_3R },
     ],
