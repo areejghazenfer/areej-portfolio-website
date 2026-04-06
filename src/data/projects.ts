@@ -293,7 +293,7 @@ export const projects: Project[] = [
       { type: "portraitPair", left: p3_adultForts, right: p3_slide, captionLeft: "#19-21 Adult Fort Offices", captionRight: "#17 Puzzle Poof Seating" },
       { src: p3_kidsHouses,     conceptWidth: true, caption: "#27 Children Activity Space" },
       { src: p3_playground,     conceptWidth: true, caption: "#29 Children's Indoor Playground" },
-      { src: p3_mirroredDaysFull, conceptWidth: true },
+      { src: p3_mirroredDaysFull, conceptWidth: true, caption: "Floor Plan" },
     ],
     description: "A Montessori-inspired co-working and childcare space for shared growth.",
     year: "2024",
