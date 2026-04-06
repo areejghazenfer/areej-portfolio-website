@@ -141,7 +141,15 @@ export interface ProjectImageWithProgram {
   programGroups: ProjectProgramItem[][];
 }
 
-export type ProjectImageEntry = string | ProjectImage | ProjectImageGroup | ProjectImagePortraitPair | ProjectImageGrid | ProjectImageSideGroup | ProjectImageWithProgram;
+export interface ProjectImageAnnotated {
+  type: "annotated";
+  src: string;
+  caption?: string;
+  leftAnnotations: { text: string; topPercent: number }[];
+  rightAnnotations: { text: string; topPercent: number }[];
+}
+
+export type ProjectImageEntry = string | ProjectImage | ProjectImageGroup | ProjectImagePortraitPair | ProjectImageGrid | ProjectImageSideGroup | ProjectImageWithProgram | ProjectImageAnnotated;
 
 export interface ProjectDetail {
   label: string;
@@ -349,7 +357,19 @@ export const projects: Project[] = [
       { src: p4_page4Full,  conceptWidth: true },
       { src: p4_page4Render, conceptWidth: true },
       { src: p4_page4Wall,  conceptWidth: true },
-      { src: p4_page6,      conceptWidth: true },
+      {
+        type: "annotated",
+        src: p4_page6,
+        caption: "Courtyard Performance Render",
+        leftAnnotations: [
+          { text: "Level 4 - Tree planters to preserve existing courtyard foliage. Serves as separation between gathering and walking spaces of the courtyard", topPercent: 35 },
+          { text: "Level 1 - Pathways inset within courtyard turf. Connecting the audience and the performers", topPercent: 70 },
+        ],
+        rightAnnotations: [
+          { text: "Level 3 - Audience seating facing the stage from all sides of courtyard", topPercent: 42 },
+          { text: "Level 2 - Performance stage", topPercent: 60 },
+        ],
+      },
       { src: p4_page7,      conceptWidth: true },
     ],
     referenceImageSrc: p1_2L,

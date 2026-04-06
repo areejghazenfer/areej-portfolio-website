@@ -2,7 +2,7 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import React, { useEffect, useLayoutEffect, useRef, useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, X, ChevronLeft, ChevronRight } from "lucide-react";
-import { projects, ProjectImage, ProjectImageGroup, ProjectImagePortraitPair, ProjectImageGrid, ProjectImageSideGroup, ProjectImageEntry, ProjectDetail, ProjectPhase } from "@/data/projects";
+import { projects, ProjectImage, ProjectImageGroup, ProjectImagePortraitPair, ProjectImageGrid, ProjectImageSideGroup, ProjectImageAnnotated, ProjectImageEntry, ProjectDetail, ProjectPhase } from "@/data/projects";
 
 const resolveImage = (img: string | ProjectImage) =>
   typeof img === "string" ? { src: img } : img;
@@ -640,6 +640,80 @@ const ProjectDetail = () => {
                     )}
                   </div>
                 </motion.div>
+              );
+            }
+
+            // ── Annotated Image ──
+            if (typeof img === "object" && "type" in img && img.type === "annotated") {
+              const ann = img as ProjectImageAnnotated;
+              const myIdx = flatIdx++;
+              const w = refImageWidth;
+              const imgW = w ? `${w}px` : "calc((100vh - 168px) * 8.5 / 11)";
+              return (
+                <div key={`${activePhase}-ann-${i}`} className="relative w-full">
+                  {/* Centered image */}
+                  <motion.div
+                    className="relative group mx-auto cursor-zoom-in flex-shrink-0"
+                    style={{ width: imgW }}
+                    data-flat-index={myIdx}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: i * 0.05 }}
+                    onClick={() => handleOpen(myIdx)}
+                  >
+                    <img src={ann.src} alt="" className="w-full h-auto block" loading="lazy" />
+                  </motion.div>
+
+                  {/* Left annotations */}
+                  {w && ann.leftAnnotations.map((a, j) => (
+                    <div
+                      key={j}
+                      className="absolute"
+                      style={{
+                        right: `calc(50% + ${w / 2}px + 12px)`,
+                        top: `${a.topPercent}%`,
+                        transform: "translateY(-50%)",
+                        width: `calc(50% - ${w / 2}px - 24px)`,
+                      }}
+                    >
+                      <p className="font-body text-[9px] italic leading-snug text-muted-foreground mb-[6px]">{a.text}</p>
+                      <div className="flex items-center gap-[2px]">
+                        <div className="flex-1 h-px" style={{ background: "hsl(var(--primary) / 0.45)" }} />
+                        <span className="font-body text-[9px] text-muted-foreground leading-none">›</span>
+                      </div>
+                    </div>
+                  ))}
+
+                  {/* Right annotations */}
+                  {w && ann.rightAnnotations.map((a, j) => (
+                    <div
+                      key={j}
+                      className="absolute"
+                      style={{
+                        left: `calc(50% + ${w / 2}px + 12px)`,
+                        top: `${a.topPercent}%`,
+                        transform: "translateY(-50%)",
+                        width: `calc(50% - ${w / 2}px - 24px)`,
+                      }}
+                    >
+                      <div className="flex items-center gap-[2px] mb-[6px]">
+                        <span className="font-body text-[9px] text-muted-foreground leading-none">‹</span>
+                        <div className="flex-1 h-px" style={{ background: "hsl(var(--primary) / 0.45)" }} />
+                      </div>
+                      <p className="font-body text-[9px] italic leading-snug text-muted-foreground">{a.text}</p>
+                    </div>
+                  ))}
+
+                  {/* Bottom caption */}
+                  {ann.caption && (
+                    <p
+                      className="font-body text-[9px] italic text-muted-foreground mt-1 mx-auto"
+                      style={{ width: imgW }}
+                    >
+                      {ann.caption}
+                    </p>
+                  )}
+                </div>
               );
             }
 
