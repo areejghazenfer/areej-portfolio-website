@@ -334,17 +334,6 @@ export const projects: Project[] = [
     },
   },
   {
-    id: "earth-vessels",
-    title: "Earth Vessels",
-    location: "Studio Collection",
-    category: "craft",
-    image: project6,
-    images: [project6, project4, project2],
-    description:
-      "A curated collection of handcrafted ceramic vessels inspired by earth tones and organic forms. Each piece is a dialogue between material and maker.",
-    year: "2024",
-  },
-  {
     id: "common-thread",
     title: "The Common Thread",
     location: "Richmond, VA",
@@ -367,6 +356,17 @@ export const projects: Project[] = [
       { src: p4_page1R,     conceptWidth: true },
     ],
     referenceImageSrc: p1_2L,
+  },
+  {
+    id: "earth-vessels",
+    title: "Earth Vessels",
+    location: "Studio Collection",
+    category: "craft",
+    image: project6,
+    images: [project6, project4, project2],
+    description:
+      "A curated collection of handcrafted ceramic vessels inspired by earth tones and organic forms. Each piece is a dialogue between material and maker.",
+    year: "2024",
   },
   {
     id: "material-studies",
