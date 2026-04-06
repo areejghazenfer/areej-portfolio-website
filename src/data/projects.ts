@@ -72,6 +72,11 @@ import p2_inst5  from "@/assets/project2-images/2023_1212_INSTALLATION_5.png";
 import p2_inst6  from "@/assets/project2-images/2023_1212_INSTALLATION_6.png";
 import p2_inst12 from "@/assets/project2-images/2023_1212_INSTALLATION_12.png";
 
+// Project 5 — Integrated Light
+import p5_table1 from "@/assets/project5-images Integrated Light/table 1.png";
+import p5_table2 from "@/assets/project5-images Integrated Light/table 2.png";
+import p5_table3 from "@/assets/project5-images Integrated Light/table 3.png";
+
 // Project 4 — Common Thread
 import p4_page1R    from "@/assets/project4-images/Common_Thread_Page_1_R.jpg";
 import p4_page2Full from "@/assets/project4-images/Common_Thread_Page_2_Full.jpg";
@@ -367,6 +372,26 @@ export const projects: Project[] = [
     description:
       "A curated collection of handcrafted ceramic vessels inspired by earth tones and organic forms. Each piece is a dialogue between material and maker.",
     year: "2024",
+  },
+  {
+    id: "integrated-light",
+    title: "Integrated Light",
+    location: "",
+    category: "craft",
+    image: p5_table3,
+    description: "A study of the relationship between light and furniture design.",
+    year: "2024",
+    details: [
+      { label: "Type", value: "Craft" },
+      { label: "Year", value: "2024" },
+    ],
+    body: "Integrated Light explores the intersection of lighting and furniture design, questioning whether the two must remain distinct. Through the making of a side table, the project examines how illumination can become part of structure rather than addition to it. The result is an exploration of balance, where light and form coexist as equal contributors to atmosphere and function.",
+    images: [
+      { src: p5_table3, conceptWidth: true },
+      { src: p5_table2, conceptWidth: true },
+      { src: p5_table1, conceptWidth: true },
+    ],
+    referenceImageSrc: p1_2L,
   },
   {
     id: "material-studies",
