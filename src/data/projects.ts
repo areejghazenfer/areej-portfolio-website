@@ -71,6 +71,14 @@ import p2_inst3  from "@/assets/project2-images/2023_1212_INSTALLATION_3.png";
 import p2_inst5  from "@/assets/project2-images/2023_1212_INSTALLATION_5.png";
 import p2_inst6  from "@/assets/project2-images/2023_1212_INSTALLATION_6.png";
 import p2_inst12 from "@/assets/project2-images/2023_1212_INSTALLATION_12.png";
+
+// Project 4 — Common Thread
+import p4_page1R    from "@/assets/project4-images/Common_Thread_Page_1_R.jpg";
+import p4_page2Full from "@/assets/project4-images/Common_Thread_Page_2_Full.jpg";
+import p4_page3Full from "@/assets/project4-images/Common_Thread_Page_3_Full.jpg";
+import p4_page4Full from "@/assets/project4-images/Common_Thread_Page_4_Full.jpg";
+import p4_page4Render from "@/assets/project4-images/Common_Thread_Page_4_Render.jpg";
+import p4_page4Wall from "@/assets/project4-images/Common_Thread_Page_4_Wall.jpg";
 export interface ProjectImage {
   src: string;
   /** If set, this image is displayed side-by-side with a paired image */
@@ -327,15 +335,21 @@ export const projects: Project[] = [
     year: "2024",
   },
   {
-    id: "spa-retreat",
-    title: "Spa Retreat",
-    location: "Muscat, Oman",
+    id: "common-thread",
+    title: "Common Thread",
+    location: "",
     category: "interiors",
-    image: project4,
-    images: [project4, project5, project1],
-    description:
-      "A sanctuary of calm where natural stone and brass fixtures create an intimate, spa-like atmosphere. Every detail invites stillness and renewal.",
-    year: "2023",
+    image: p4_page1R,
+    images: [
+      { src: p4_page1R,     conceptWidth: true },
+      { src: p4_page2Full,  conceptWidth: true },
+      { src: p4_page3Full,  conceptWidth: true },
+      { src: p4_page4Full,  conceptWidth: true },
+      { src: p4_page4Render, conceptWidth: true },
+      { src: p4_page4Wall,  conceptWidth: true },
+    ],
+    referenceImageSrc: p1_2L,
+    year: "",
   },
   {
     id: "material-studies",
