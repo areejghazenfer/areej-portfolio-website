@@ -378,7 +378,7 @@ export const projects: Project[] = [
     title: "Integrated Light",
     location: "",
     category: "craft",
-    image: p5_table3,
+    image: p5_table2,
     description: "A study of the relationship between light and furniture design.",
     year: "2024",
     details: [
@@ -387,8 +387,8 @@ export const projects: Project[] = [
     ],
     body: "Integrated Light explores the intersection of lighting and furniture design, questioning whether the two must remain distinct. Through the making of a side table, the project examines how illumination can become part of structure rather than addition to it. The result is an exploration of balance, where light and form coexist as equal contributors to atmosphere and function.",
     images: [
-      { src: p5_table3, conceptWidth: true },
       { src: p5_table2, conceptWidth: true },
+      { src: p5_table3, conceptWidth: true },
       { src: p5_table1, conceptWidth: true },
     ],
     referenceImageSrc: p1_2L,
