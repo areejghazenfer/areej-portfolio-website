@@ -356,7 +356,7 @@ export const projects: Project[] = [
     year: "2024",
     details: [
       { label: "Type", value: "Commercial" },
-      { label: "Featured in", value: "Reconciliation + Celebration" },
+      { label: "Featured in", value: "Reconciliation + Celebration, MOB Studio" },
       { label: "Year", value: "2023" },
       { label: "Client", value: "The Weyanoke Association" },
       { label: "Site", value: "325 N. Harrison, Richmond VA, 23284" },
