@@ -353,8 +353,8 @@ export const projects: Project[] = [
     images: [
       { src: p4_page2Full,  conceptWidth: true },
       { src: p4_page3Full,  conceptWidth: true },
-      { src: p4_page4Render, conceptWidth: true },
       { src: p4_page4Wall,  conceptWidth: true },
+      { src: p4_page4Render, conceptWidth: true },
       { src: p4_page1R,     conceptWidth: true },
     ],
     referenceImageSrc: p1_2L,
