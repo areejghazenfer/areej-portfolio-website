@@ -405,8 +405,8 @@ export const projects: Project[] = [
     images: [
       { src: p6_dandelions, conceptWidth: true },
       { src: p6_crab,       conceptWidth: true },
-      { src: p6_bones,      conceptWidth: true },
       { type: "portraitPair", left: p6_gazebo, right: p6_pipeline },
+      { src: p6_bones,      conceptWidth: true },
       { src: p6_shellBlock, conceptWidth: true },
     ],
     referenceImageSrc: p1_2L,
