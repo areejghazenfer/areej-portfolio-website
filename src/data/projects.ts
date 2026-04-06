@@ -367,7 +367,7 @@ export const projects: Project[] = [
     title: "Integrated Light",
     location: "",
     category: "craft",
-    image: p5_table2,
+    image: p5_table3,
     description: "A study of the relationship between light and furniture design.",
     year: "2024",
     details: [
