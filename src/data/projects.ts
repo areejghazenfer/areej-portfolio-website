@@ -77,6 +77,14 @@ import p5_table1 from "@/assets/project5-images Integrated Light/table 1.png";
 import p5_table2 from "@/assets/project5-images Integrated Light/table 2.png";
 import p5_table3 from "@/assets/project5-images Integrated Light/table 3.png";
 
+// Project 6 — Traces of Place
+import p6_bones       from "@/assets/project6-images Traces of Place/BONES.png";
+import p6_crab        from "@/assets/project6-images Traces of Place/Crab.png";
+import p6_dandelions  from "@/assets/project6-images Traces of Place/DANDELIONS.png";
+import p6_gazebo      from "@/assets/project6-images Traces of Place/GAZEBO.png";
+import p6_pipeline    from "@/assets/project6-images Traces of Place/PIPELINE.png";
+import p6_shellBlock  from "@/assets/project6-images Traces of Place/Shell Block Print.png";
+
 // Project 4 — Common Thread
 import p4_page1R    from "@/assets/project4-images/Common_Thread_Page_1_R.jpg";
 import p4_page2Full from "@/assets/project4-images/Common_Thread_Page_2_Full.jpg";
@@ -383,14 +391,25 @@ export const projects: Project[] = [
     referenceImageSrc: p1_2L,
   },
   {
-    id: "material-studies",
-    title: "Material Studies",
-    location: "Research",
+    id: "traces-of-place",
+    title: "Traces of Place",
+    location: "",
     category: "research",
-    image: project5,
-    images: [project5, project3, project6],
-    description:
-      "An ongoing exploration of regional materials—clay, linen, stone—and their potential in contemporary interior applications.",
+    image: p6_bones,
+    description: "A study of context, landscape, and community across urban and rural environments.",
     year: "2023",
+    details: [
+      { label: "Year", value: "2023" },
+    ],
+    body: "Traces of Place investigates how context and landscape shape our understanding of environment and community. Through site analysis of urban and rural conditions, the project studies how historical and ecological layers reveal identity within place. By observing and documenting these traces, it explores how design can emerge from attentive engagement with the land and its stories.",
+    images: [
+      { src: p6_bones,      conceptWidth: true },
+      { src: p6_crab,       conceptWidth: true },
+      { src: p6_dandelions, conceptWidth: true },
+      { src: p6_gazebo,     conceptWidth: true },
+      { src: p6_pipeline,   conceptWidth: true },
+      { src: p6_shellBlock, conceptWidth: true },
+    ],
+    referenceImageSrc: p1_2L,
   },
 ];
