@@ -349,27 +349,13 @@ export const projects: Project[] = [
     title: "Common Thread",
     location: "",
     category: "interiors",
-    image: p4_page6,
+    image: p4_page1R,
     images: [
       { src: p4_page1R,     conceptWidth: true },
       { src: p4_page2Full,  conceptWidth: true },
       { src: p4_page3Full,  conceptWidth: true },
-      { src: p4_page4Full,  conceptWidth: true },
       { src: p4_page4Render, conceptWidth: true },
       { src: p4_page4Wall,  conceptWidth: true },
-      {
-        type: "annotated",
-        src: p4_page6,
-        caption: "Courtyard Performance Render",
-        leftAnnotations: [
-          { text: "Level 4 - Tree planters to preserve existing courtyard foliage. Serves as separation between gathering and walking spaces of the courtyard", topPercent: 35 },
-          { text: "Level 1 - Pathways inset within courtyard turf. Connecting the audience and the performers", topPercent: 70 },
-        ],
-        rightAnnotations: [
-          { text: "Level 3 - Audience seating facing the stage from all sides of courtyard", topPercent: 42 },
-          { text: "Level 2 - Performance stage", topPercent: 60 },
-        ],
-      },
       { src: p4_page7,      conceptWidth: true },
     ],
     referenceImageSrc: p1_2L,
