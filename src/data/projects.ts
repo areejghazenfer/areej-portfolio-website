@@ -363,17 +363,6 @@ export const projects: Project[] = [
     referenceImageSrc: p1_2L,
   },
   {
-    id: "earth-vessels",
-    title: "Earth Vessels",
-    location: "Studio Collection",
-    category: "craft",
-    image: project6,
-    images: [project6, project4, project2],
-    description:
-      "A curated collection of handcrafted ceramic vessels inspired by earth tones and organic forms. Each piece is a dialogue between material and maker.",
-    year: "2024",
-  },
-  {
     id: "integrated-light",
     title: "Integrated Light",
     location: "",
