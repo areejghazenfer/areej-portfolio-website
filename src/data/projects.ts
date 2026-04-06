@@ -395,7 +395,7 @@ export const projects: Project[] = [
     title: "Traces of Place",
     location: "",
     category: "research",
-    image: p6_bones,
+    image: p6_dandelions,
     description: "A study of context, landscape, and community across urban and rural environments.",
     year: "2023",
     details: [
@@ -403,11 +403,10 @@ export const projects: Project[] = [
     ],
     body: "Traces of Place investigates how context and landscape shape our understanding of environment and community. Through site analysis of urban and rural conditions, the project studies how historical and ecological layers reveal identity within place. By observing and documenting these traces, it explores how design can emerge from attentive engagement with the land and its stories.",
     images: [
-      { src: p6_bones,      conceptWidth: true },
-      { src: p6_crab,       conceptWidth: true },
       { src: p6_dandelions, conceptWidth: true },
-      { src: p6_gazebo,     conceptWidth: true },
-      { src: p6_pipeline,   conceptWidth: true },
+      { src: p6_crab,       conceptWidth: true },
+      { src: p6_bones,      conceptWidth: true },
+      { type: "portraitPair", left: p6_gazebo, right: p6_pipeline },
       { src: p6_shellBlock, conceptWidth: true },
     ],
     referenceImageSrc: p1_2L,
