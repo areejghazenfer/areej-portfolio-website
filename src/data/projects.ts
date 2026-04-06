@@ -346,10 +346,17 @@ export const projects: Project[] = [
   },
   {
     id: "common-thread",
-    title: "Common Thread",
-    location: "",
+    title: "The Common Thread",
+    location: "Richmond, VA",
     category: "interiors",
     image: p4_page6,
+    description: "A courtyard performance space where movement weaves community together.",
+    year: "2024",
+    details: [
+      { label: "Client", value: "The Weyanoke Association" },
+      { label: "Site", value: "325 N. Harrison, Richmond VA, 23284" },
+    ],
+    body: "The Common Thread explores connection as a living rhythm, a pulse shared between individuals and the spaces they inhabit. Rooted in the metaphor of the heart, the project examines how movement, form, and gathering intertwine to create collective presence. Through this rhythm, architecture reveals how community is both shaped and sustained by connection.",
     images: [
       { src: p4_page2Full,  conceptWidth: true },
       { src: p4_page3Full,  conceptWidth: true },
@@ -358,7 +365,6 @@ export const projects: Project[] = [
       { src: p4_page1R,     conceptWidth: true },
     ],
     referenceImageSrc: p1_2L,
-    year: "",
   },
   {
     id: "material-studies",
