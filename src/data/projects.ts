@@ -79,6 +79,8 @@ import p4_page3Full from "@/assets/project4-images/Common_Thread_Page_3_Full.jpg
 import p4_page4Full from "@/assets/project4-images/Common_Thread_Page_4_Full.jpg";
 import p4_page4Render from "@/assets/project4-images/Common_Thread_Page_4_Render.jpg";
 import p4_page4Wall from "@/assets/project4-images/Common_Thread_Page_4_Wall.jpg";
+import p4_page6    from "@/assets/project4-images/Weyanoke_Page_6.jpg";
+import p4_page7    from "@/assets/project4-images/Weyanoke_Page_7.jpg";
 export interface ProjectImage {
   src: string;
   /** If set, this image is displayed side-by-side with a paired image */
@@ -339,7 +341,7 @@ export const projects: Project[] = [
     title: "Common Thread",
     location: "",
     category: "interiors",
-    image: p4_page1R,
+    image: p4_page6,
     images: [
       { src: p4_page1R,     conceptWidth: true },
       { src: p4_page2Full,  conceptWidth: true },
@@ -347,6 +349,8 @@ export const projects: Project[] = [
       { src: p4_page4Full,  conceptWidth: true },
       { src: p4_page4Render, conceptWidth: true },
       { src: p4_page4Wall,  conceptWidth: true },
+      { src: p4_page6,      conceptWidth: true },
+      { src: p4_page7,      conceptWidth: true },
     ],
     referenceImageSrc: p1_2L,
     year: "",
