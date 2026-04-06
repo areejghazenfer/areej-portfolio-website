@@ -353,6 +353,7 @@ export const projects: Project[] = [
     description: "A courtyard performance space where movement weaves community together.",
     year: "2024",
     details: [
+      { label: "Type", value: "Commercial" },
       { label: "Year", value: "2023" },
       { label: "Client", value: "The Weyanoke Association" },
       { label: "Site", value: "325 N. Harrison, Richmond VA, 23284" },
