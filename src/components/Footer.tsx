@@ -4,14 +4,14 @@ import { Link } from "react-router-dom";
 const Footer = () => {
   return (
     <footer style={{ backgroundColor: "#6C2915" }} className="px-6 md:px-12 py-10">
-      <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+      <div className="relative flex flex-col md:flex-row items-center justify-between gap-6">
         <span className="font-display text-sm font-light tracking-wide text-white/80">
           Areej Ghazenfer
         </span>
 
         <Link
           to="/contact"
-          className="font-body text-xs tracking-widest uppercase text-white/80 hover:text-white transition-colors"
+          className="absolute left-1/2 -translate-x-1/2 font-body text-xs tracking-widest uppercase text-white/80 hover:text-white transition-colors"
         >
           Contact
         </Link>
