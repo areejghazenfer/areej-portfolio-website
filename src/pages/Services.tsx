@@ -50,7 +50,7 @@ const Services = () => {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.15 }}
-          className="font-body text-sm md:text-base leading-relaxed text-muted-foreground"
+          className="font-body text-xs md:text-sm leading-relaxed text-muted-foreground"
         >
           Every project starts with a question about how a space should work and
           what it should feel like to be inside it. The work is figuring out how
@@ -94,7 +94,7 @@ const Services = () => {
                 {service.body.map((para, j) => (
                   <p
                     key={j}
-                    className="font-body text-sm md:text-base leading-relaxed text-muted-foreground"
+                    className="font-body text-xs md:text-sm leading-relaxed text-muted-foreground"
                   >
                     {para}
                   </p>
@@ -124,7 +124,7 @@ const Services = () => {
         >
           {/* Final dot */}
           <div className="absolute left-0 top-4 w-[9px] h-[9px] rounded-full bg-foreground/30 -translate-x-[4px]" />
-          <p className="font-body text-sm text-muted-foreground leading-relaxed">
+          <p className="font-body text-xs md:text-sm text-muted-foreground leading-relaxed">
             All services are inquiry-based. Reach out to start a conversation.
           </p>
         </motion.div>
