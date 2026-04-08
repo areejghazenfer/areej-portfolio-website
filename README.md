@@ -2,6 +2,9 @@
 
 > Maintained by Areej Ghazenfer (@areejghazenfer) — Interior Designer & Creative Director
 
+
+## [View Full Website](https://areej.ghazenfer.com)
+
 ## Tech stack
 
 - Vite
