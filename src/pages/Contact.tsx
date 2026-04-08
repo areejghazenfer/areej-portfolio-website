@@ -25,7 +25,7 @@ const Contact = () => {
           transition={{ duration: 0.7, delay: 0.15 }}
           className="font-body text-xs md:text-sm leading-relaxed text-muted-foreground mb-8"
         >
-          If you have a project in mind, a question about the process, or just want to start a conversation, send a message and I'll get back to you.
+          If you have a project in mind, a question about the process, or just want to start a conversation, send a message and we'll get back to you soon!
         </motion.p>
 
       </section>
