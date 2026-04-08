@@ -12,6 +12,11 @@ dist
 dist-ssr
 *.local
 
+# Raw source/portfolio files — keep private
+src/2025_1108 PORTFOLIO Folder/
+src/Project 1 The adaptive frame/
+src/assets/**/*.pdf
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
