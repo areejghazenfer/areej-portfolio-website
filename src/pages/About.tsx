@@ -1,78 +1,59 @@
 import { motion } from "framer-motion";
-import SectionHeader from "@/components/SectionHeader";
+import { Link } from "react-router-dom";
+
+const paragraphs = [
+  "We believe spaces should guide experience. Not just contain it.",
+  "The way a room unfolds as you move through it, the details that register before you consciously notice them. That is what good interior design produces, and it is what we work toward in every project.",
+  "Our approach is rooted in iteration. We don't arrive at a concept and execute it unchanged. We test it, question it, and refine it until the decisions hold up. That process extends to how we think about individual pieces within a space. Furniture, built-ins, and custom elements are not finishing touches. They are spatial decisions that determine how a room functions, how it feels to move through, and how closely it reflects the routines and habits of the person living in it.",
+  "Good design is not about how a space photographs. It is about how it works on a Tuesday morning, how it absorbs the way you actually live, how it makes the ordinary feel considered. We design for that.",
+  "Areej Ghazenfer studied interior design at a fine arts university and currently works in residential design. Outside of client work, she makes things. Woodworking, jewelry, sewing. It keeps her grounded in how materials behave and how things are put together in practice.",
+  "We take on independent projects selectively. If yours sounds like a good fit, reach out.",
+];
 
 const About = () => {
   return (
-    <main className="pt-24 md:pt-32">
-      <section className="px-6 md:px-12 pb-20 md:pb-32">
-        <SectionHeader title="About" />
+    <main className="pt-24 md:pt-32 pb-24 md:pb-40">
+      <section className="px-6 md:px-16 lg:px-24 max-w-3xl">
+        <motion.h1
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7 }}
+          className="font-display text-4xl md:text-5xl font-light mb-12 tracking-wide"
+        >
+          About
+        </motion.h1>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-24">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="space-y-6"
-          >
-            <p className="font-body text-base md:text-lg leading-relaxed text-muted-foreground">
-              Areej Ghazenfer is an interior designer whose work sits at the 
-              intersection of craft, material research, and spatial storytelling. 
-              Based in the Gulf region, the studio draws from a rich tradition of 
-              craftsmanship while embracing contemporary design sensibilities.
-            </p>
-            <p className="font-body text-base md:text-lg leading-relaxed text-muted-foreground">
-              Each project begins with a deep understanding of place—its light, 
-              its textures, its rhythms. We believe that thoughtful interiors 
-              don't impose; they listen. The result is spaces that feel both 
-              intentional and effortless, where every material choice serves 
-              a larger narrative.
-            </p>
-            <p className="font-body text-base md:text-lg leading-relaxed text-muted-foreground">
-              The studio works across residential, hospitality, and cultural 
-              projects, with a particular interest in how traditional materials 
-              can find new expression in modern contexts.
-            </p>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="space-y-8"
-          >
-            <div>
-              <h3 className="font-display text-lg tracking-wide mb-2">Services</h3>
-              <div className="h-px bg-foreground/20 mb-4" />
-              <ul className="space-y-2 font-body text-sm text-muted-foreground">
-                <li>Residential Interior Design</li>
-                <li>Hospitality & Commercial Spaces</li>
-                <li>Material & Furniture Sourcing</li>
-                <li>Art Curation & Styling</li>
-                <li>Design Research & Consultation</li>
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="font-display text-lg tracking-wide mb-2">Education</h3>
-              <div className="h-px bg-foreground/20 mb-4" />
-              <p className="font-body text-sm text-muted-foreground">
-                Bachelor of Interior Design<br />
-                Placeholder University, 2020
-              </p>
-            </div>
-
-            <div>
-              <h3 className="font-display text-lg tracking-wide mb-2">Recognition</h3>
-              <div className="h-px bg-foreground/20 mb-4" />
-              <ul className="space-y-2 font-body text-sm text-muted-foreground">
-                <li>Emerging Designer Award, 2024</li>
-                <li>Design Week Feature, 2023</li>
-              </ul>
-            </div>
-          </motion.div>
+        <div className="space-y-7">
+          {paragraphs.map((para, i) => (
+            <motion.p
+              key={i}
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 + i * 0.07 }}
+              className={`font-body text-xs md:text-sm leading-relaxed ${
+                i === 0
+                  ? "text-foreground font-medium"
+                  : "text-muted-foreground"
+              }`}
+            >
+              {para}
+            </motion.p>
+          ))}
         </div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.65 }}
+          className="mt-12"
+        >
+          <Link
+            to="/contact"
+            className="inline-block font-body text-xs tracking-widest uppercase border border-foreground/30 px-10 py-3 hover:bg-foreground hover:text-background transition-all duration-300"
+          >
+            Get in Touch
+          </Link>
+        </motion.div>
       </section>
     </main>
   );
