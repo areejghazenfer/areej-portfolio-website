@@ -28,19 +28,6 @@ const Contact = () => {
           If you have a project in mind, a question about the process, or just want to start a conversation, send a message and I'll get back to you.
         </motion.p>
 
-        <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.25 }}
-          className="flex flex-col gap-2"
-        >
-          <a
-            href="mailto:aghazenfer1@gmail.com"
-            className="font-body text-xs text-muted-foreground hover:text-foreground transition-colors border-b border-foreground/10 inline-block w-fit pb-0.5"
-          >
-            aghazenfer1@gmail.com
-          </a>
-        </motion.div>
       </section>
 
       {/* Form */}
