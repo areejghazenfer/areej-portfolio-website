@@ -286,7 +286,7 @@ export const projects: Project[] = [
     year: "2023",
     details: [
       { label: "Type", value: "Exhibition" },
-      { label: "Featured In", value: "Qualia" },
+      { label: "Featured In", value: "Qualia, The Anderson Gallery" },
       { label: "Year", value: "2023" },
     ],
     body: "The Mind's Eye examines how perception constructs meaning through repetition and iteration. Shifting between scales, formats, and sequences, the project reveals that understanding space is inseparable from how we see and imagine it. Moving between miniature and macro worlds, it questions the boundaries of observation and imagination, suggesting that every act of seeing is also an act of interpretation.",
@@ -404,7 +404,7 @@ export const projects: Project[] = [
     year: "2023",
     details: [
       { label: "Type", value: "Research" },
-      { label: "Featured in", value: "Art & Music on the Farm" },
+      { label: "Featured in", value: "Art & Music on the Farm, Machipongo, Virginia" },
       { label: "Year", value: "2023" },
       { label: "Site", value: "The Eastern Shore, VA and Richmond, VA" },
     ],
