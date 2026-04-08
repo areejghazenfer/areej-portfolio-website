@@ -19,7 +19,7 @@ const services = [
     number: "02",
     title: "Full Design",
     body: [
-      "For homeowners who are ready to do this properly. We work through the entire design process together, from the first conversation about how you live in your space to a complete set of documents ready for execution.",
+      "For homeowners who are ready to commit to the full process. We work through the entire design process together, from the first conversation about how you live in your space to a complete set of documents ready for execution.",
       "That includes spatial layout, concept development, material and finish selections, furniture sourcing, and detailed drawings for all non-structural interior work. Everything your contractor needs to build the design correctly, organized and clearly communicated.",
       "The result is a home that was thought through, not assembled piece by piece and hoped for the best.",
     ],
