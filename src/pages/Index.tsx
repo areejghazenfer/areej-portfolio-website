@@ -85,7 +85,7 @@ const Index = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="font-body text-base md:text-lg leading-relaxed text-muted-foreground"
+            className="font-body text-xs md:text-sm leading-relaxed text-muted-foreground"
           >
             We design spaces that guide experience and reflect the people who inhabit them. Rooted in process and grounded in how things are made, every detail is intentional.
           </motion.p>
