@@ -1,5 +1,6 @@
 import { useRef } from "react";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 
 const services = [
   {
@@ -124,9 +125,15 @@ const Services = () => {
         >
           {/* Final dot */}
           <div className="absolute left-0 top-4 w-[9px] h-[9px] rounded-full bg-foreground/30 -translate-x-[4px]" />
-          <p className="font-body text-xs md:text-sm text-muted-foreground leading-relaxed">
+          <p className="font-body text-xs md:text-sm text-muted-foreground leading-relaxed mb-8">
             All services are inquiry-based. Reach out to start a conversation.
           </p>
+          <Link
+            to="/contact"
+            className="inline-block font-body text-xs tracking-widest uppercase border border-foreground/30 px-10 py-3 hover:bg-foreground hover:text-background transition-all duration-300"
+          >
+            Get in Touch
+          </Link>
         </motion.div>
       </section>
     </main>
