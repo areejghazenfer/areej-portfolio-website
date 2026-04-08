@@ -131,6 +131,7 @@ const Contact = () => {
               rows={4}
               className={inputClass + " resize-none"}
               placeholder="Tell me more about your project or vision"
+              required
             />
           </div>
 
