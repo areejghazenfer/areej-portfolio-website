@@ -36,17 +36,9 @@ const Contact = () => {
         >
           <a
             href="mailto:aghazenfer1@gmail.com"
-            className="font-body text-xs md:text-sm text-muted-foreground hover:text-foreground transition-colors border-b border-foreground/10 inline-block w-fit pb-0.5"
+            className="font-body text-xs text-muted-foreground hover:text-foreground transition-colors border-b border-foreground/10 inline-block w-fit pb-0.5"
           >
             aghazenfer1@gmail.com
-          </a>
-          <a
-            href="https://instagram.com/areej.instudio"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="font-body text-xs md:text-sm text-muted-foreground hover:text-foreground transition-colors border-b border-foreground/10 inline-block w-fit pb-0.5"
-          >
-            @areej.instudio
           </a>
         </motion.div>
       </section>
