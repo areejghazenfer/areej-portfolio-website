@@ -87,9 +87,7 @@ const Index = () => {
             transition={{ duration: 0.6 }}
             className="font-body text-base md:text-lg leading-relaxed text-muted-foreground"
           >
-            We create spaces that honor the dialogue between material and memory. 
-            Rooted in craft and guided by restraint, each project is a study in 
-            warmth, texture, and quiet beauty.
+            We design spaces that guide experience and reflect the people who inhabit them. Rooted in process and grounded in how things are made, every detail is intentional.
           </motion.p>
           <motion.div
             initial={{ opacity: 0 }}
