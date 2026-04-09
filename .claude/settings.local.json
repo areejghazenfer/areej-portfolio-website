@@ -19,7 +19,8 @@
       "Bash(taskkill /F /IM node.exe)",
       "Bash(cmd /c \"taskkill /F /IM node.exe\")",
       "Bash(node -e \":*)",
-      "WebFetch(domain:agathus.com)"
+      "WebFetch(domain:agathus.com)",
+      "WebFetch(domain:github.com)"
     ]
   }
 }
