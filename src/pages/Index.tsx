@@ -16,7 +16,7 @@ const Index = () => {
           <img
             src={heroImage}
             alt="Interior design showcase"
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover object-[calc(100%+110px)_center] md:object-center"
           />
           <div className="absolute inset-0 bg-foreground/30" />
         </div>
@@ -26,7 +26,7 @@ const Index = () => {
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.3 }}
-            className="font-display text-5xl md:text-7xl lg:text-8xl font-light tracking-mega-wide uppercase text-primary-foreground"
+            className="font-display text-3xl md:text-7xl lg:text-8xl font-light tracking-wider md:tracking-mega-wide uppercase text-primary-foreground"
           >
             Areej Ghazenfer
           </motion.h1>

@@ -1,7 +1,7 @@
 import { useParams, Link, useNavigate } from "react-router-dom";
 import React, { useEffect, useLayoutEffect, useRef, useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, X, ChevronLeft, ChevronRight } from "lucide-react";
+import { ArrowLeft, X, ChevronLeft, ChevronRight } from "lucide-react"; // ChevronLeft/Right still used in in-page carousels
 import { projects, ProjectImage, ProjectImageGroup, ProjectImagePortraitPair, ProjectImageGrid, ProjectImageSideGroup, ProjectImageAnnotated, ProjectImageEntry, ProjectDetail, ProjectPhase } from "@/data/projects";
 
 const resolveImage = (img: string | ProjectImage) =>
@@ -25,7 +25,7 @@ const ImageWithOverlay = ({
     <img ref={imgRef} src={src} alt={alt} className={className} loading={eager ? "eager" : "lazy"} />
     {caption && (
       <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center pointer-events-none">
-        <p className="font-display text-base font-semibold tracking-wide text-white text-center px-6">
+        <p className="font-display text-xs md:text-base font-semibold tracking-wide text-white text-center px-6 italic">
           {caption}
         </p>
       </div>
@@ -85,7 +85,10 @@ const ProjectDetail = () => {
   useEffect(() => {
     const el = refImageRef.current;
     if (!el) return;
-    const obs = new ResizeObserver(() => setRefImageWidth(el.offsetWidth));
+    const obs = new ResizeObserver(() => {
+      const containerW = el.parentElement?.clientWidth ?? Infinity;
+      setRefImageWidth(Math.min(el.offsetWidth, containerW));
+    });
     obs.observe(el);
     return () => obs.disconnect();
   }, [activePhase, id]);
@@ -101,24 +104,27 @@ const ProjectDetail = () => {
     : [];
 
   // Flatten display images for lightbox navigation (carousel images are separate)
-  const allImages: string[] = displayImages.flatMap((img) => {
+  const allImagesWithCaptions: { src: string; caption?: string }[] = displayImages.flatMap((img) => {
     if (typeof img === "object" && "type" in img && img.type === "group") {
-      return (img as ProjectImageGroup).items.map((it) => it.src);
+      return (img as ProjectImageGroup).items.map((it) => ({ src: it.src, caption: it.caption }));
     }
     if (typeof img === "object" && "type" in img && img.type === "grid") {
-      return (img as ProjectImageGrid).items.map((it) => it.src);
+      return (img as ProjectImageGrid).items.map((it) => ({ src: it.src, caption: it.caption }));
     }
     if (typeof img === "object" && "type" in img && img.type === "sideGroup") {
       const sg = img as ProjectImageSideGroup;
-      return [...sg.leftImages.map(i => i.src), sg.rightImage.src];
+      return [...sg.leftImages.map(i => ({ src: i.src, caption: i.caption })), { src: sg.rightImage.src, caption: sg.rightImage.caption }];
     }
     if (typeof img === "object" && "type" in img && img.type === "portraitPair") {
       const pp = img as ProjectImagePortraitPair;
-      return [pp.left, pp.right];
+      return [{ src: pp.left, caption: pp.captionLeft }, { src: pp.right, caption: pp.captionRight }];
     }
     const r = resolveImage(img as string | ProjectImage);
-    return r.pair ? [r.src, r.pair] : [r.src];
+    if (r.pair) return [{ src: r.src, caption: r.caption }, { src: r.pair, caption: r.captionPair ?? r.caption }];
+    return [{ src: r.src, caption: r.caption }];
   });
+  const allImages = allImagesWithCaptions.map(i => i.src);
+  const allCaptions = allImagesWithCaptions.map(i => i.caption);
 
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   const openedAtIndex = useRef<number | null>(null);
@@ -159,6 +165,17 @@ const ProjectDetail = () => {
 
   const mainRef = useRef<HTMLDivElement>(null);
   const leftInnerRef = useRef<HTMLDivElement>(null);
+  const touchStartX = useRef<number | null>(null);
+
+  const makeTouchHandlers = (prev: () => void, next: () => void) => ({
+    onTouchStart: (e: React.TouchEvent) => { touchStartX.current = e.touches[0].clientX; },
+    onTouchEnd: (e: React.TouchEvent) => {
+      if (touchStartX.current === null) return;
+      const dx = e.changedTouches[0].clientX - touchStartX.current;
+      if (Math.abs(dx) > 50) dx < 0 ? next() : prev();
+      touchStartX.current = null;
+    },
+  });
 
   useLayoutEffect(() => {
     if (mainRef.current) mainRef.current.scrollTop = 0;
@@ -290,7 +307,7 @@ const ProjectDetail = () => {
       </div>
 
       {/* ── Right column: 75% — scrolls naturally with main ── */}
-      <div className="relative flex-1 md:w-3/4 flex flex-col gap-4 px-4 pt-[48px] pb-[50px]">
+      <div className="relative flex-1 min-w-0 md:w-3/4 flex flex-col gap-4 px-4 pt-[48px] pb-[50px]">
 
         {/* Hidden reference image — measures rendered width for page sizing */}
         {project.referenceImageSrc && (
@@ -348,9 +365,9 @@ const ProjectDetail = () => {
 
         {(() => {
           let flatIdx = 0;
-          const imgClass = "h-[calc(100vh-168px)] w-auto block mx-auto flex-shrink-0";
-          const spreadClass = "h-[calc((100vh-168px)/2)] w-auto block mx-auto flex-shrink-0";
-          const tallClass = "w-[calc((100vh-168px)*22/17)] h-auto block mx-auto flex-shrink-0";
+          const imgClass = "w-full h-auto md:h-[calc(100vh-168px)] md:w-auto block mx-auto flex-shrink-0";
+          const spreadClass = "w-full h-auto md:h-[calc((100vh-168px)/2)] md:w-auto block mx-auto flex-shrink-0";
+          const tallClass = "w-full h-auto md:w-[calc((100vh-168px)*22/17)] block mx-auto flex-shrink-0";
           const handleOpen = (flatIndex: number) => {
             openedAtIndex.current = flatIndex;
             savedScrollTop.current = mainRef.current?.scrollTop ?? 0;
@@ -415,13 +432,13 @@ const ProjectDetail = () => {
                     <div
                       ref={j === 0 ? bookSketchRef : undefined}
                       className="relative group cursor-zoom-in mx-auto flex-shrink-0"
-                      style={{ outline: "1.5px solid hsl(var(--primary))", width: refImageWidth ? `${refImageWidth}px` : "calc((100vh - 168px) * 8.5 / 11)" }}
+                      style={{ outline: "1.5px solid hsl(var(--primary))", width: refImageWidth ? `${refImageWidth}px` : "calc((100vh - 168px) * 8.5 / 11)", maxWidth: "100%" }}
                       data-flat-index={groupStartIdx + j}
                       onClick={() => handleOpen(groupStartIdx + j)}
                     >
                       <img src={item.src} alt={item.caption} className="w-full h-auto block" loading="lazy" />
                       <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center pointer-events-none">
-                        <p className="font-display text-sm font-semibold text-white text-center px-4">{item.caption}</p>
+                        <p className="font-display text-[10px] md:text-sm font-semibold text-white text-center px-4 italic">{item.caption}</p>
                       </div>
                     </div>
                     {j < group.items.length - 1 && (
@@ -437,7 +454,7 @@ const ProjectDetail = () => {
                   const carouselWidth = refImageWidth ? `${refImageWidth}px` : "calc((100vh - 168px) * 8.5 / 11)";
                   return (
                     <React.Fragment>
-                    <div ref={carouselRowRef} className="mx-auto mt-8 flex items-center gap-3" style={{ width: carouselWidth }}>
+                    <div ref={carouselRowRef} className="mx-auto mt-8 flex items-center gap-3" style={{ width: carouselWidth, maxWidth: "100%" }}>
                       <button
                         onClick={() => setCarouselPage(p => Math.max(0, p - 1))}
                         disabled={carouselPage === 0}
@@ -468,7 +485,7 @@ const ProjectDetail = () => {
                         <ChevronRight size={20} />
                       </button>
                     </div>
-                    <p className="mx-auto mt-2 font-body text-[10px] tracking-ultra-wide text-muted-foreground/60 text-center" style={{ width: carouselWidth }}>
+                    <p className="mx-auto mt-2 font-body text-[10px] tracking-ultra-wide text-muted-foreground/60 text-center" style={{ width: carouselWidth, maxWidth: "100%" }}>
                       {carouselPage * perPage + 1}–{Math.min((carouselPage + 1) * perPage, group.carousel!.length)} / {group.carousel!.length}
                     </p>
                     </React.Fragment>
@@ -476,11 +493,11 @@ const ProjectDetail = () => {
                 })()}
 
                 {/* Divider beneath third image */}
-                <div className="mx-auto mt-6 h-px" style={{ width: refImageWidth ? `${refImageWidth}px` : "calc((100vh - 168px) * 8.5 / 11)", background: "hsl(var(--primary) / 0.4)" }} />
+                <div className="mx-auto mt-6 h-px" style={{ width: refImageWidth ? `${refImageWidth}px` : "calc((100vh - 168px) * 8.5 / 11)", maxWidth: "100%", background: "hsl(var(--primary) / 0.4)" }} />
 
                 {/* Text — absolutely positioned to the right of the centred images */}
                 <div
-                  className="absolute flex flex-col"
+                  className="absolute hidden md:flex flex-col"
                   style={{
                     top: bookSketchOffsetTop,
                     left: refImageWidth ? `calc(50% + ${refImageWidth / 2}px + 16px)` : "calc(50% + (100vh - 168px) * 8.5 / 22 + 16px)",
@@ -492,7 +509,7 @@ const ProjectDetail = () => {
                 </div>
                 {group.carouselText && (
                   <div
-                    className="absolute"
+                    className="absolute hidden md:block"
                     style={{
                       top: carouselOffsetTop,
                       left: refImageWidth ? `calc(50% + ${refImageWidth / 2}px + 16px)` : "calc(50% + (100vh - 168px) * 8.5 / 22 + 16px)",
@@ -515,7 +532,7 @@ const ProjectDetail = () => {
                 <motion.div
                   key={`${activePhase}-${i}`}
                   className="relative group mx-auto cursor-zoom-in flex-shrink-0"
-                  style={{ width: w }}
+                  style={{ width: w, maxWidth: "100%" }}
                   data-flat-index={myIdx}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -525,7 +542,7 @@ const ProjectDetail = () => {
                   <img src={cw.src} alt={`${project.title} — View ${i + 1}`} className="w-full h-auto block" loading="lazy" />
                   {cw.caption && (
                     <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center pointer-events-none">
-                      <p className="font-display text-base font-semibold tracking-wide text-white text-center px-6">{cw.caption}</p>
+                      <p className="font-display text-xs md:text-base font-semibold tracking-wide text-white text-center px-6 italic">{cw.caption}</p>
                     </div>
                   )}
                 </motion.div>
@@ -544,6 +561,7 @@ const ProjectDetail = () => {
                     className="mx-auto"
                     style={{
                       width: gridWidth,
+                      maxWidth: "100%",
                       display: "grid",
                       gridTemplateColumns: `repeat(${grid.columns}, 1fr)`,
                       gap: "8px",
@@ -566,13 +584,13 @@ const ProjectDetail = () => {
                               grid.cellAspectRatio
                                 ? "absolute inset-0 w-full h-full object-contain block"
                                 : grid.fitHeight
-                                ? "h-[calc(100vh-168px)] w-auto block mx-auto"
+                                ? "w-full h-auto md:h-[calc(100vh-168px)] md:w-auto block mx-auto"
                                 : "w-full h-auto block"
                             }
                             loading="lazy"
                           />
                           <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center pointer-events-none">
-                            <p className="font-display text-xs font-semibold text-white text-center px-2">{item.caption}</p>
+                            <p className="font-display text-[9px] md:text-xs font-semibold text-white text-center px-2 italic">{item.caption}</p>
                           </div>
                         </div>
                       );
@@ -580,7 +598,7 @@ const ProjectDetail = () => {
                   </div>
                   {grid.text && (
                     <div
-                      className="absolute top-0"
+                      className="absolute top-0 hidden md:block"
                       style={{
                         left: refImageWidth ? `calc(50% + ${refImageWidth / 2}px + 16px)` : "calc(50% + (100vh - 168px) * 8.5 / 22 + 16px)",
                         width: refImageWidth ? `calc(50% - ${refImageWidth / 2}px - 32px)` : "180px",
@@ -602,8 +620,8 @@ const ProjectDetail = () => {
               return (
                 <motion.div
                   key={`${activePhase}-sg-${i}`}
-                  className="mx-auto"
-                  style={{ width: sgWidth, display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px", alignItems: "stretch" }}
+                  className="mx-auto grid grid-cols-1 md:grid-cols-2 gap-2"
+                  style={{ width: sgWidth, maxWidth: "100%", alignItems: "stretch" }}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: i * 0.05 }}
@@ -620,7 +638,7 @@ const ProjectDetail = () => {
                         <img src={item.src} alt={item.caption ?? ""} className="w-full h-auto block" loading="lazy" />
                         {item.caption && (
                           <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center pointer-events-none">
-                            <p className="font-display text-sm font-semibold text-white text-center px-4">{item.caption}</p>
+                            <p className="font-display text-[10px] md:text-sm font-semibold text-white text-center px-4 italic">{item.caption}</p>
                           </div>
                         )}
                       </div>
@@ -635,7 +653,7 @@ const ProjectDetail = () => {
                     <img src={sg.rightImage.src} alt={sg.rightImage.caption ?? ""} className="w-full h-full object-cover block" loading="lazy" />
                     {sg.rightImage.caption && (
                       <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center pointer-events-none">
-                        <p className="font-display text-sm font-semibold text-white text-center px-4">{sg.rightImage.caption}</p>
+                        <p className="font-display text-[10px] md:text-sm font-semibold text-white text-center px-4 italic">{sg.rightImage.caption}</p>
                       </div>
                     )}
                   </div>
@@ -654,7 +672,7 @@ const ProjectDetail = () => {
                   {/* Centered image */}
                   <motion.div
                     className="relative group mx-auto cursor-zoom-in flex-shrink-0"
-                    style={{ width: imgW }}
+                    style={{ width: imgW, maxWidth: "100%" }}
                     data-flat-index={myIdx}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -668,7 +686,7 @@ const ProjectDetail = () => {
                   {w && ann.leftAnnotations.map((a, j) => (
                     <div
                       key={j}
-                      className="absolute"
+                      className="absolute hidden md:block"
                       style={{
                         right: `calc(50% + ${w / 2}px + 12px)`,
                         top: `${a.topPercent}%`,
@@ -688,7 +706,7 @@ const ProjectDetail = () => {
                   {w && ann.rightAnnotations.map((a, j) => (
                     <div
                       key={j}
-                      className="absolute"
+                      className="absolute hidden md:block"
                       style={{
                         left: `calc(50% + ${w / 2}px + 12px)`,
                         top: `${a.topPercent}%`,
@@ -708,7 +726,7 @@ const ProjectDetail = () => {
                   {ann.caption && (
                     <p
                       className="font-body text-[9px] italic text-muted-foreground mt-1 mx-auto"
-                      style={{ width: imgW }}
+                      style={{ width: imgW, maxWidth: "100%" }}
                     >
                       {ann.caption}
                     </p>
@@ -727,8 +745,8 @@ const ProjectDetail = () => {
               return (
                 <motion.div
                   key={`${activePhase}-${i}`}
-                  className="mx-auto flex gap-4"
-                  style={{ width: pairWidth }}
+                  className="mx-auto flex flex-col md:flex-row gap-4"
+                  style={{ width: pairWidth, maxWidth: "100%" }}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: i * 0.05 }}
@@ -737,7 +755,7 @@ const ProjectDetail = () => {
                     <img src={pp.left} alt="" className="w-full h-full object-cover block" loading="lazy" />
                     {pp.captionLeft && (
                       <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center pointer-events-none">
-                        <p className="font-display text-sm font-semibold text-white text-center px-4">{pp.captionLeft}</p>
+                        <p className="font-display text-[10px] md:text-sm font-semibold text-white text-center px-4 italic">{pp.captionLeft}</p>
                       </div>
                     )}
                   </div>
@@ -745,7 +763,7 @@ const ProjectDetail = () => {
                     <img src={pp.right} alt="" className="w-full h-full object-cover block" loading="lazy" />
                     {pp.captionRight && (
                       <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center pointer-events-none">
-                        <p className="font-display text-sm font-semibold text-white text-center px-4">{pp.captionRight}</p>
+                        <p className="font-display text-[10px] md:text-sm font-semibold text-white text-center px-4 italic">{pp.captionRight}</p>
                       </div>
                     )}
                   </div>
@@ -806,13 +824,12 @@ const ProjectDetail = () => {
       </div>
       </div>{/* ── end columns row ── */}
 
-      {/* ── Next Project Bar — full width ── */}
+      {/* ── Next Project Bar — desktop only ── */}
       {nextProject && (
         <div
-          className="flex items-center justify-between gap-6 w-full flex-shrink-0"
+          className="hidden md:flex items-center justify-between gap-6 w-full flex-shrink-0"
           style={{ paddingTop: "50px", paddingBottom: "50px", paddingLeft: "50px", paddingRight: "50px", borderTop: "1px solid hsl(var(--border) / 0.2)" }}
         >
-          {/* Prev project — left side */}
           {currentIndex > 0 ? (
             <button
               onClick={() => goTo(projects[currentIndex - 1].id)}
@@ -821,8 +838,6 @@ const ProjectDetail = () => {
               ← Previous Project: {projects[currentIndex - 1].title}
             </button>
           ) : <div />}
-
-          {/* Next project — right side */}
           <button
             onClick={() => goTo(nextProject.id)}
             className="font-body text-[11px] tracking-ultra-wide uppercase text-muted-foreground hover:text-primary transition-colors underline underline-offset-4"
@@ -831,6 +846,16 @@ const ProjectDetail = () => {
           </button>
         </div>
       )}
+
+      {/* ── Back to Work — mobile only ── */}
+      <div className="md:hidden flex justify-start px-6 py-10 flex-shrink-0" style={{ borderTop: "1px solid hsl(var(--border) / 0.2)" }}>
+        <Link
+          to="/work"
+          className="inline-flex items-center gap-2 font-body text-[11px] tracking-ultra-wide uppercase text-muted-foreground hover:text-primary transition-colors"
+        >
+          <ArrowLeft size={12} /> Back to Work
+        </Link>
+      </div>
 
       {/* ── Lightbox ── */}
       <AnimatePresence>
@@ -842,6 +867,7 @@ const ProjectDetail = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={closeLightbox}
+            {...makeTouchHandlers(lightboxPrev, lightboxNext)}
           >
             {/* X button */}
             <button
@@ -849,14 +875,6 @@ const ProjectDetail = () => {
               onClick={closeLightbox}
             >
               <X size={28} />
-            </button>
-
-            {/* Prev arrow */}
-            <button
-              className="absolute left-6 text-white hover:text-white/60 transition-colors z-10"
-              onClick={(e) => { e.stopPropagation(); lightboxPrev(); }}
-            >
-              <ChevronLeft size={40} />
             </button>
 
             {/* Image + counter */}
@@ -871,18 +889,16 @@ const ProjectDetail = () => {
                 exit={{ opacity: 0, scale: 0.95 }}
                 transition={{ duration: 0.2 }}
               />
-              <p className="text-white/60 text-sm font-body tracking-widest">
+              {allCaptions[lightboxIndex] && (
+                <p className="text-white/80 text-xs font-body tracking-widest text-center px-4 max-w-[85vw] italic">
+                  {allCaptions[lightboxIndex]}
+                </p>
+              )}
+              <p className="text-white/40 text-xs font-body tracking-widest">
                 {lightboxIndex + 1} / {allImages.length}
               </p>
             </div>
 
-            {/* Next arrow */}
-            <button
-              className="absolute right-6 text-white hover:text-white/60 transition-colors z-10"
-              onClick={(e) => { e.stopPropagation(); lightboxNext(); }}
-            >
-              <ChevronRight size={40} />
-            </button>
           </motion.div>
         )}
       </AnimatePresence>
@@ -906,18 +922,13 @@ const ProjectDetail = () => {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setCarouselLightboxIndex(null)}
+              {...makeTouchHandlers(prev, next)}
             >
               <button
                 className="absolute top-6 right-6 text-white hover:text-white/60 transition-colors z-10"
                 onClick={() => setCarouselLightboxIndex(null)}
               >
                 <X size={28} />
-              </button>
-              <button
-                className="absolute left-6 text-white hover:text-white/60 transition-colors z-10"
-                onClick={(e) => { e.stopPropagation(); prev(); }}
-              >
-                <ChevronLeft size={40} />
               </button>
               <div className="flex flex-col items-center gap-3" onClick={(e) => e.stopPropagation()}>
                 <motion.img
@@ -934,12 +945,6 @@ const ProjectDetail = () => {
                   {carouselLightboxIndex + 1} / {total}
                 </p>
               </div>
-              <button
-                className="absolute right-6 text-white hover:text-white/60 transition-colors z-10"
-                onClick={(e) => { e.stopPropagation(); next(); }}
-              >
-                <ChevronRight size={40} />
-              </button>
             </motion.div>
           );
         })()}
@@ -964,18 +969,13 @@ const ProjectDetail = () => {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setCarousel2LightboxIndex(null)}
+              {...makeTouchHandlers(prev, next)}
             >
               <button
                 className="absolute top-6 right-6 text-white hover:text-white/60 transition-colors z-10"
                 onClick={() => setCarousel2LightboxIndex(null)}
               >
                 <X size={28} />
-              </button>
-              <button
-                className="absolute left-6 text-white hover:text-white/60 transition-colors z-10"
-                onClick={(e) => { e.stopPropagation(); prev(); }}
-              >
-                <ChevronLeft size={40} />
               </button>
               <div className="flex flex-col items-center gap-3" onClick={(e) => e.stopPropagation()}>
                 <motion.img
@@ -992,12 +992,6 @@ const ProjectDetail = () => {
                   {carousel2LightboxIndex + 1} / {total}
                 </p>
               </div>
-              <button
-                className="absolute right-6 text-white hover:text-white/60 transition-colors z-10"
-                onClick={(e) => { e.stopPropagation(); next(); }}
-              >
-                <ChevronRight size={40} />
-              </button>
             </motion.div>
           );
         })()}
